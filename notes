@@ -1,3 +1,66 @@
-Ray-casting
-les murs son des plans perpendiculaires par rapport au sol
-champ de vision parallele au sol
+ajouter verif : si la taille de la fenêtre est supérieure à celle de l'écran, 
+la taille de la fenêtre doit être celle de l'écran : fonction spéciale mlx_get_sreen_size sur Linux
+
+PARSING
+
+0) verification des arg
+verfier si 1 seul arg et que bien un fichier .cub accessible
+Verifier si bien un fihchier et pas un dossier
+: Nombre d’arguments invalide : moins de 2 arguments ou plus de 3
+: 3 arguments mais le 3ème n’est pas --save
+: 2 arguments mais un fichier lol.cub.c
+: Fichier .cub n’existe pas
+: Le .cub est un directory
+
+premiere etape pour faciliter le parsing et verification -> recuperer toutes les lignes du fichier (av[1]) dans un tableau char **?
+gnl sur fd du fichier .cub
+
+INFOS sur les textures / couleurs
+1) verifier validite
+si "10NSEW" FAUX -> info de map doivent etre en dernier
+peut etre obliger une syntaxe decriture -> chaque info sur une ligne differente ( avec espaces et de saut de ligne possible)
+commencant necessairement par :
+(ft_strncmp de la ligne et de chaque debut de ligne 
+et si ok verifier si info qui suit est valide)
+NO + chemin valide
+SO
+WE
+EA
+C + couleur en format RGB (separees par ',')
+F
+les 6 infos doivent exister (sans doublon)
+dans un ordre aleatoire
+si info differente apparait -> exit 
+
+2) parser les infos
+creer un tableau de struc t_img pour chaque info
++ il faudra verifier a chaque si le chemin est exact
++ que la couleur est bien inscrite dans bon format
++ fonction specifique pour convertir donnees en couleur rgb
+Ajouter dans t_img un char *path ?
+
+
+MAP
+1) verifier la validite
+verifier si ligne vide = error
+verifier 1re et derniere ligne si que de 1
+verifier 1re colone et derniere colonne si que des 1
+les espaces doivent etre entoure de 1 ou de l eof -> sinon invalide
+si ligne curr > ligne au dessus tous les caractere plus grand sont des 1
+si ligne cur > ligne en dessous tous les caractere plus grand sont des 1
+car peuvent etre "10NSEW", si on recontre une fois "NSEW" les car ne peuvent plus etre que des 1 0 ou " "
+
+2) parser sous forme de char ** ?
+char ** malloc de la taille de la ligne la plus grande + nb chaines dans la map
+char * malloc de la taille des lignes
+tab a gere de la meme maniere que les espcaces ?
+remplacer les ' ' par des murs (1) afin que toutes les lignes soient de la taille de l plus grande ligne
+init la struc pour le joueur (position, direction)
+struc pour les x, y du rayon
+
+si 1 -> on est face a une image
+
+
+EXEC
+
+dabord dessiner la map en 2D ?

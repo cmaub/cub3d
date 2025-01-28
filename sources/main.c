@@ -6,7 +6,7 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:59:12 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/01/28 12:27:08 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:26:09 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void    init_structs(t_params *par)
        destroy(par);
     par->win_ptr = mlx_new_window(par->mlx_ptr, WIDTH, LENGTH, "cub3d");
     if (!par->win_ptr)
-        destroy(par); // fonction destroy
+        destroy(par);
 	img->width = WIDTH;
 	img->length = LENGTH;
     img->img = mlx_new_image(par->mlx_ptr, img->width, img->length);
