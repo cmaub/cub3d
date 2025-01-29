@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+         #
+#    By: anvander <anvander@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/28 11:47:39 by cmaubert          #+#    #+#              #
-#    Updated: 2025/01/29 12:37:58 by cmaubert         ###   ########.fr        #
+#    Updated: 2025/01/29 15:48:41 by anvander         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC      = cc
-FLAGS   = -Wall -Wextra -Werror -I$(HEADER) -I$(MLX) -I$(LIBFT)
+FLAGS   = -Wall -Wextra -Werror -g -I$(HEADER) -I$(MLX) -I$(LIBFT)
 
 NAME = cub3D
 

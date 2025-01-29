@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/01/29 12:37:41 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/01/29 17:54:08 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,17 @@
 # include "libft.h"
 # include <limits.h>//
 # include <X11/keysym.h>
+
+typedef struct s_map
+{
+	char **map_tab;
+	int	map_x;
+	int	map_y;
+	int	map_s;
+	int	color;
+	char	**texture;
+}	t_map;
+
 
 typedef struct s_player
 {
@@ -55,6 +66,7 @@ typedef struct s_params
 	// t_map	*map;
 	t_img		img;
 	t_player	player;
+	t_map		*map;
 }	t_params;
 
 int	rgb_to_int(int r, int g, int b);
