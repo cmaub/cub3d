@@ -6,7 +6,7 @@
 #    By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/28 11:47:39 by cmaubert          #+#    #+#              #
-#    Updated: 2025/01/28 11:50:02 by cmaubert         ###   ########.fr        #
+#    Updated: 2025/01/29 12:37:58 by cmaubert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ HEADER = includes
 SRC_PATH  = sources
 MLX      = mlx
 
-SOURCES = 
+SOURCES = main.c \
+			color.c
 
 SRCS = $(addprefix $(SRC_PATH)/,$(SOURCES))
 objects = $(addprefix $(OBJ_PATH)/,$(SOURCES:.c=.o))

@@ -6,7 +6,7 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/01/28 12:24:47 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:37:41 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # define TRUE 1
 # define FALSE 0
 
-# define LENGTH 1470
-# define WIDTH 2590
+# define LENGTH 800
+# define WIDTH 1100
 
 # include "mlx.h"
 # include <errno.h>
@@ -30,6 +30,12 @@
 # include <limits.h>//
 # include <X11/keysym.h>
 
+typedef struct s_player
+{
+	double pos_x;
+	double pos_y;
+	int	color;
+}	t_player;
 
 typedef struct s_img
 {
@@ -44,10 +50,13 @@ typedef struct s_img
 
 typedef struct s_params
 {
-	void	*mlx_ptr;
-	void	*win_ptr;
+	void		*mlx_ptr;
+	void		*win_ptr;
 	// t_map	*map;
-	t_img	img;
+	t_img		img;
+	t_player	player;
 }	t_params;
+
+int	rgb_to_int(int r, int g, int b);
 
 #endif
