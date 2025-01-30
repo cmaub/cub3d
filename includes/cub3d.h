@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/01/29 17:54:08 by anvander         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:50:10 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,24 +30,6 @@
 # include <limits.h>//
 # include <X11/keysym.h>
 
-typedef struct s_map
-{
-	char **map_tab;
-	int	map_x;
-	int	map_y;
-	int	map_s;
-	int	color;
-	char	**texture;
-}	t_map;
-
-
-typedef struct s_player
-{
-	double pos_x;
-	double pos_y;
-	int	color;
-}	t_player;
-
 typedef struct s_img
 {
 	void	*img;
@@ -58,6 +40,39 @@ typedef struct s_img
 	int		width;
 	int		length;
 }	t_img;
+
+typedef struct s_player
+{
+	double 	pos_x;
+	double 	pos_y;
+	int		color;
+	char	orient;
+}	t_player;
+
+typedef struct s_map
+{
+	int			length_max;
+	int			nb_lines;
+	char 		**parse_file;
+	char		**map_tab;
+	int			map_x;
+	int			map_y;
+	int			map_s;
+	int			color;
+	t_img		floor;
+	t_img		ceiling;
+	t_img		wall_no;
+	t_img		wall_so;
+	t_img		wall_ea;
+	t_img		wall_we;
+	int			rgb_floor;
+	int			rgb_ceil;
+	char		*path_no;
+	char		*path_so;
+	char		*path_ea;
+	char		*path_we;
+	t_player	player;
+}	t_map;
 
 typedef struct s_params
 {
@@ -70,5 +85,7 @@ typedef struct s_params
 }	t_params;
 
 int	rgb_to_int(int r, int g, int b);
+int	check_map(char **str, t_map *map, int i);
+
 
 #endif
