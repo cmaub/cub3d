@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: anvander <anvander@student.42.fr>          +#+  +:+       +#+         #
+#    By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/28 11:47:39 by cmaubert          #+#    #+#              #
-#    Updated: 2025/01/29 15:48:41 by anvander         ###   ########.fr        #
+#    Updated: 2025/01/31 17:30:43 by cmaubert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,11 @@ SRC_PATH  = sources
 MLX      = mlx
 
 SOURCES = main.c \
-			color.c
+			color.c \
+			draw.c \
+			init.c \
+			parse.c \
+			parse_utils.c 
 
 SRCS = $(addprefix $(SRC_PATH)/,$(SOURCES))
 objects = $(addprefix $(OBJ_PATH)/,$(SOURCES:.c=.o))

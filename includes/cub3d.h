@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/01/30 15:50:10 by anvander         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:46:19 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,25 @@ typedef struct s_params
 	t_map		*map;
 }	t_params;
 
-int	rgb_to_int(int r, int g, int b);
-int	check_map(char **str, t_map *map, int i);
 
+
+/* Parsing */
+int	check_av(t_map *map, char **str, int count);
+int	check_map(char **str, t_map *map, int i);
+int	check_color_params(char *str, int *rgb);
+int	rgb_to_int(int r, int g, int b);
+void	replace_spaces(char **str, t_map *map, int index);
+void	print_map(char **str);
+void	print_tab(char **str, t_map *map);
+
+
+/* Init */
+void	count_alloc(t_map *map, char *file);
+void    init_structs(t_params *par);
+void	init_t_map(t_params *par);
+void	destroy(t_params *par);
+
+void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
+void    draw_map(t_img *img, t_map *map);
 
 #endif
