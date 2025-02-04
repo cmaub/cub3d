@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:59:12 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/01/31 17:36:15 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:30:16 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 void	destroy(t_params *par)
 {
-	if (par->img.img)
-		mlx_destroy_image(par->mlx_ptr, par->img.img);
+	if (par->img->img)
+		mlx_destroy_image(par->mlx_ptr, par->img->img);
 	if (par->win_ptr)
 		mlx_destroy_window(par->mlx_ptr, par->win_ptr);
 	if (par->mlx_ptr)
@@ -60,11 +60,15 @@ int main(int ac, char **av)
 	par->map->parse_file[i] = "\0";
 	if (!check_av(par->map, par->map->parse_file, i))
 		return (1);
-	// print_tab(par->map->map_tab, par->map);
+	print_tab(par->map->map_tab, par->map);
     init_structs(par);
-    my_mlx_pixel_put(&par->img, par->player.pos_x, par->player.pos_y, par->player.color);
-	draw_map(&par->img, par->map);
-    mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img.img, 0, 0);
+    // my_mlx_pixel_put(&par->img, par->player.pos_x, par->player.pos_y, par->player.color);
+	draw_map(par->img, par->map);
+	draw_vertical_grid(par->img, par->map);
+	draw_horizontal_grid(par->img, par->map);
+	draw_player(par->img, par->map, par->player, par->player->pos_x, par->player->pos_y);
+    mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img->img, 0, 0);
+	mlx_key_hook(par->win_ptr, key_event, par);
     mlx_loop(par->mlx_ptr);
     return (0);
 }

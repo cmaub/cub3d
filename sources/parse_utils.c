@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:34:35 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/01/31 16:35:08 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:18:47 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	replace_spaces(char **str, t_map *map, int index)
 
 	i = 0;
 	// map->map_tab = try_malloc(sizeof(char *))
-	while (str[i] && i <= map->nb_lines)
+	while (str[i] && i < map->nb_lines)
 	{
 		j = 0;
 		while (str[i][j] && j < map->length_max)

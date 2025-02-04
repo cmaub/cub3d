@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+         #
+#    By: anvander <anvander@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/28 11:47:39 by cmaubert          #+#    #+#              #
-#    Updated: 2025/01/31 17:30:43 by cmaubert         ###   ########.fr        #
+#    Updated: 2025/02/04 16:30:44 by anvander         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ MLX      = mlx
 SOURCES = main.c \
 			color.c \
 			draw.c \
+			events.c \
 			init.c \
 			parse.c \
 			parse_utils.c 

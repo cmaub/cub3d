@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:30:57 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/01/31 16:33:11 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:29:53 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,27 +64,32 @@ void    init_structs(t_params *par)
 {
     t_img *img;
 
-    img = &par->img;
+    par->img = try_malloc(sizeof(t_img));
+	par->player = try_malloc(sizeof(t_player));
+	par->img->player = par->player;
+	img = par->img;
     par->mlx_ptr = NULL;
     par->win_ptr = NULL;
     par->mlx_ptr = mlx_init();
     if (!par->mlx_ptr)
        destroy(par);
-    par->win_ptr = mlx_new_window(par->mlx_ptr, WIDTH, LENGTH, "cub3d");
+    par->win_ptr = mlx_new_window(par->mlx_ptr, WIDTH, HEIGHT, "cub3d");
     if (!par->win_ptr)
         destroy(par);
     else
     {
 	    img->width = WIDTH;
-	    img->length = LENGTH;
-        img->img = mlx_new_image(par->mlx_ptr, img->width, img->length);
+	    img->height = HEIGHT;
+        img->img = mlx_new_image(par->mlx_ptr, img->width, img->height);
         if (!img->img)
             destroy(par);
         img->addr = mlx_get_data_addr(img->img, &img->b_pix, &img->l_len, &img->endian);
     }
-    par->player.color = rgb_to_int(255, 255, 255);
-    par->player.pos_x = 300;
-    par->player.pos_y = 300;
+	par->player->pos_x = 500; // 
+	par->player->pos_y = 600; // 
+    par->player->color = rgb_to_int(255, 0, 0);
+    par->player->pos_x = 0;
+    par->player->pos_y = 0;
     // par->map.map_x = 4;
     // par->map.map_y = 4;
     // par->map.map_s = 64;

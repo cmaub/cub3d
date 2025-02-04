@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/01/31 16:46:19 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:53:31 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,14 @@
 # define TRUE 1
 # define FALSE 0
 
-# define LENGTH 800
+# define HEIGHT 800
 # define WIDTH 1100
+
+# define W 65362
+# define S 65364
+# define A 65361
+# define D 65364
+# define KEY_ESC 65307
 
 # include "mlx.h"
 # include <errno.h>
@@ -30,6 +36,14 @@
 # include <limits.h>//
 # include <X11/keysym.h>
 
+typedef struct s_player
+{
+	double 	pos_x;
+	double 	pos_y;
+	int		color;
+	char	orient;
+}	t_player;
+
 typedef struct s_img
 {
 	void	*img;
@@ -38,16 +52,9 @@ typedef struct s_img
 	int		l_len;
 	int		endian;
 	int		width;
-	int		length;
+	int		height;
+	t_player *player;
 }	t_img;
-
-typedef struct s_player
-{
-	double 	pos_x;
-	double 	pos_y;
-	int		color;
-	char	orient;
-}	t_player;
 
 typedef struct s_map
 {
@@ -78,9 +85,8 @@ typedef struct s_params
 {
 	void		*mlx_ptr;
 	void		*win_ptr;
-	// t_map	*map;
-	t_img		img;
-	t_player	player;
+	t_img		*img;
+	t_player	*player;
 	t_map		*map;
 }	t_params;
 
@@ -103,6 +109,14 @@ void	init_t_map(t_params *par);
 void	destroy(t_params *par);
 
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
+void	draw_vertical_grid(t_img *img, t_map *map);
+void	draw_horizontal_grid(t_img *img, t_map *map);
 void    draw_map(t_img *img, t_map *map);
+
+/* Draw */
+void	draw_player(t_img *img, t_map *map, t_player *player, double x, double y);
+
+/* Events */
+int		key_event(int keycode, t_params *par);
 
 #endif
