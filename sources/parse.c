@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:31:48 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/04 14:16:13 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:18:55 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,8 @@ int	check_map(char **str, t_map *map, int index)
 		index += 1;
 	}
 	map->nb_lines = i;
+	map->unit_v = HEIGHT / map->nb_lines;
+	map->unit_h = WIDTH / map->length_max;
 	if (flag != 1)
 	{
 		printf("error line %d\n", __LINE__); //TODO
@@ -157,7 +159,7 @@ int	check_map(char **str, t_map *map, int index)
 	}
 	replace_spaces(str, map, save_index);
 	map->map_tab = str;
-	print_map(str);
+	// print_map(str);
 	return (TRUE);
 }
 
@@ -238,7 +240,6 @@ int	check_av(t_map *map, char **str, int count)
 				return (printf("error\n"), FALSE);
 		}
 		i++;
-		dprintf(2, "i = %d, str[i] = %s\n", i, str[i]);
 	}
 	if (!all_path_filled(map))
 	{

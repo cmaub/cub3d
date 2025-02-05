@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:59:12 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/04 17:30:16 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:26:13 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int main(int ac, char **av)
 	int	i;
 	(void)ac;
 
-    // check_filename(av[1]);
 	par = try_malloc(sizeof(t_params));
 	init_t_map(par);
 	// revoir verification exit
@@ -60,15 +59,15 @@ int main(int ac, char **av)
 	par->map->parse_file[i] = "\0";
 	if (!check_av(par->map, par->map->parse_file, i))
 		return (1);
-	print_tab(par->map->map_tab, par->map);
+	// print_tab(par->map->map_tab, par->map);
     init_structs(par);
-    // my_mlx_pixel_put(&par->img, par->player.pos_x, par->player.pos_y, par->player.color);
 	draw_map(par->img, par->map);
 	draw_vertical_grid(par->img, par->map);
 	draw_horizontal_grid(par->img, par->map);
-	draw_player(par->img, par->map, par->player, par->player->pos_x, par->player->pos_y);
     mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img->img, 0, 0);
+	draw_fov(par, par->img, par->map, par->player, 255);
 	mlx_key_hook(par->win_ptr, key_event, par);
     mlx_loop(par->mlx_ptr);
+	free(par);
     return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:30:57 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/04 17:29:53 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:56:35 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,11 @@ void    init_structs(t_params *par)
             destroy(par);
         img->addr = mlx_get_data_addr(img->img, &img->b_pix, &img->l_len, &img->endian);
     }
-	par->player->pos_x = 500; // 
-	par->player->pos_y = 600; // 
+	par->player->pos_x = 0; // 
+	par->player->pos_y = 0; // 
     par->player->color = rgb_to_int(255, 0, 0);
-    par->player->pos_x = 0;
-    par->player->pos_y = 0;
+	par->player->fov = FOV;
+	par->player->angle = PI / 2;
     // par->map.map_x = 4;
     // par->map.map_y = 4;
     // par->map.map_s = 64;

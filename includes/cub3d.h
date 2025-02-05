@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/04 17:53:31 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:30:38 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,16 @@
 # define FALSE 0
 
 # define HEIGHT 800
-# define WIDTH 1100
+# define WIDTH 1280
+# define FOV 60
+# define PI 3.14159265359
 
-# define W 65362
-# define S 65364
-# define A 65361
-# define D 65364
+# define W 119
+# define S 115
+# define A 97
+# define D 100
+# define LEFT 65361
+# define RIGHT 65363
 # define KEY_ESC 65307
 
 # include "mlx.h"
@@ -42,6 +46,10 @@ typedef struct s_player
 	double 	pos_y;
 	int		color;
 	char	orient;
+	int		fov;
+	int		p_size;
+	int		dist_to_p;
+	double	angle;
 }	t_player;
 
 typedef struct s_img
@@ -60,11 +68,13 @@ typedef struct s_map
 {
 	int			length_max;
 	int			nb_lines;
+	int			unit_h;
+	int			unit_v;
 	char 		**parse_file;
 	char		**map_tab;
-	int			map_x;
-	int			map_y;
-	int			map_s;
+	int			map_x; // pas utilse
+	int			map_y; // pas utilise
+	int			map_s; // pas utilise
 	int			color;
 	t_img		floor;
 	t_img		ceiling;
@@ -114,9 +124,11 @@ void	draw_horizontal_grid(t_img *img, t_map *map);
 void    draw_map(t_img *img, t_map *map);
 
 /* Draw */
-void	draw_player(t_img *img, t_map *map, t_player *player, double x, double y);
+void	draw_player(t_img *img, double x, double y, int color);
+void	draw_fov(t_params *par, t_img *img, t_map *map, t_player *player, int color);
 
 /* Events */
 int		key_event(int keycode, t_params *par);
+int		is_wall(t_map *map, double new_x, double new_y);
 
 #endif
