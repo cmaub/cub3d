@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:34:35 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/04 14:18:47 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/06 12:35:59 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,12 @@ void	print_map(char **str)
 	}
 }
 
-void	replace_spaces(char **str, t_map *map, int index)
+void	replace_spaces(char **str, t_map *map)
 {
 	int	i;
 	int	j;
-	(void)index;
 
 	i = 0;
-	// map->map_tab = try_malloc(sizeof(char *))
 	while (str[i] && i < map->nb_lines)
 	{
 		j = 0;

@@ -6,12 +6,11 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:59:12 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/05 17:26:13 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/06 18:38:51 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
 
 void	destroy(t_params *par)
 {
@@ -61,11 +60,11 @@ int main(int ac, char **av)
 		return (1);
 	// print_tab(par->map->map_tab, par->map);
     init_structs(par);
-	draw_map(par->img, par->map);
-	draw_vertical_grid(par->img, par->map);
-	draw_horizontal_grid(par->img, par->map);
-    mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img->img, 0, 0);
-	draw_fov(par, par->img, par->map, par->player, 255);
+	build_mini_map(par->mini_map, par->map, par);
+	draw_vertical_grid(par->mini_map, par->map);
+	draw_horizontal_grid(par->mini_map, par->map);
+	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img->img, 0, 0);
+	draw_3d(par, par->img, par->map, par->player, 255);
 	mlx_key_hook(par->win_ptr, key_event, par);
     mlx_loop(par->mlx_ptr);
 	free(par);

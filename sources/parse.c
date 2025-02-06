@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:31:48 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/05 16:18:55 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:49:26 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	all_path_filled(t_map *map)
 		return (FALSE);
 	return (TRUE);
 }
+
 int	check_map(char **str, t_map *map, int index)
 {
 	int	i;
@@ -46,7 +47,7 @@ int	check_map(char **str, t_map *map, int index)
 			{
 				if ((str[i][j] !=  '1' && str[i][j] != ' '))
 				{
-					printf("error line %d\n", __LINE__);; //TODO
+					printf("error line %d\n", __LINE__); //TODO
 					return (FALSE);
 				}
 				if (str[i][j] == ' ')
@@ -63,7 +64,7 @@ int	check_map(char **str, t_map *map, int index)
 					{
 						if (str[i][j + 1] && !ft_strchr("1 ", str[i][j + 1]))
 						{
-							printf("error line %d\n", __LINE__);; //TODO
+							printf("error line %d\n", __LINE__); //TODO
 							return (FALSE);
 						}
 					}
@@ -71,7 +72,7 @@ int	check_map(char **str, t_map *map, int index)
 					{
 						if (str[i - 1][j] && !ft_strchr("1 ", str[i - 1][j]))
 						{
-							printf("error line %d\n", __LINE__);; //TODO
+							printf("error line %d\n", __LINE__); //TODO
 							return (FALSE);
 						}
 					}
@@ -79,7 +80,7 @@ int	check_map(char **str, t_map *map, int index)
 					{
 						if (str[i + 1][j] && !ft_strchr("1 ", str[i + 1][j]))
 						{
-							printf("error line %d\n", __LINE__);; //TODO
+							printf("error line %d\n", __LINE__); //TODO
 							return (FALSE);
 						}
 					}
@@ -89,7 +90,7 @@ int	check_map(char **str, t_map *map, int index)
 			{
 				if (!ft_strchr("01NEWS ", str[i][j]))
 				{
-					printf("error line %d\n", __LINE__);; //TODO
+					printf("error line %d\n", __LINE__); //TODO
 					return (FALSE);
 				}
 				if (str[i][j] == ' ')
@@ -100,7 +101,7 @@ int	check_map(char **str, t_map *map, int index)
 							|| (str[i][j + 1] && !ft_strchr("1 ", str[i][j + 1]))
 							|| (str[i - 1][j] && !ft_strchr("1 ", str[i - 1][j])))
 						{
-							printf("error line %d\n", __LINE__);; //TODO
+							printf("error line %d\n", __LINE__); //TODO
 							return (FALSE);
 						}
 					}
@@ -109,7 +110,7 @@ int	check_map(char **str, t_map *map, int index)
 						if ((str[i][j - 1] && !ft_strchr("1 ", str[i][j - 1]))
 						|| (str[i][j + 1] && !ft_strchr("1 ", str[i][j + 1])))
 						{
-							printf("error line %d\n", __LINE__);; //TODO
+							printf("error line %d\n", __LINE__); //TODO
 							return (FALSE);
 						}
 					}
@@ -119,7 +120,7 @@ int	check_map(char **str, t_map *map, int index)
 							|| (str[i][j + 1] && !ft_strchr("1 ", str[i][j + 1]))
 							|| (str[i + 1][j] && !ft_strchr("1 ", str[i + 1][j])))
 						{
-							printf("error line %d\n", __LINE__);; //TODO
+							printf("error line %d\n", __LINE__); //TODO
 							return (FALSE);
 						}
 					}
@@ -128,14 +129,14 @@ int	check_map(char **str, t_map *map, int index)
 						if ((str[i][j - 1] && !ft_strchr("1 ", str[i][j - 1]))
 						|| (str[i][j + 1] && !ft_strchr("1 ", str[i][j + 1])))
 						{
-							printf("error line %d\n", __LINE__);; //TODO
+							printf("error line %d\n", __LINE__); //TODO
 							return (FALSE);
 						}
 					}
 				}
 				if (ft_strchr("NEWS", str[i][j]))
 				{
-					map->player.orient = str[i][j];
+					init_player_angle(&map->player.angle, str[i][j]);
 					flag++;
 				}
 			}
@@ -157,7 +158,7 @@ int	check_map(char **str, t_map *map, int index)
 		printf("error line %d\n", __LINE__); //TODO
 		return (FALSE);
 	}
-	replace_spaces(str, map, save_index);
+	replace_spaces(str, map);
 	map->map_tab = str;
 	// print_map(str);
 	return (TRUE);

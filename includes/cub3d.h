@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/05 16:30:38 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/06 18:40:41 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ typedef struct s_player
 	double 	pos_x;
 	double 	pos_y;
 	int		color;
-	char	orient;
-	int		fov;
+	double	fov;
 	int		p_size;
 	int		dist_to_p;
 	double	angle;
@@ -91,29 +90,39 @@ typedef struct s_map
 	t_player	player;
 }	t_map;
 
+typedef struct s_ray
+{
+	double	ray_angle;
+	double	distance;
+	int		flag;
+}	t_ray;
+
 typedef struct s_params
 {
 	void		*mlx_ptr;
 	void		*win_ptr;
 	t_img		*img;
+	t_img		*mini_map;
 	t_player	*player;
 	t_map		*map;
+	t_ray		*ray;
 }	t_params;
 
 
 
 /* Parsing */
-int	check_av(t_map *map, char **str, int count);
-int	check_map(char **str, t_map *map, int i);
-int	check_color_params(char *str, int *rgb);
-int	rgb_to_int(int r, int g, int b);
-void	replace_spaces(char **str, t_map *map, int index);
+int		check_av(t_map *map, char **str, int count);
+int		check_map(char **str, t_map *map, int i);
+int		check_color_params(char *str, int *rgb);
+int		rgb_to_int(int r, int g, int b);
+void	replace_spaces(char **str, t_map *map);
 void	print_map(char **str);
 void	print_tab(char **str, t_map *map);
 
 
 /* Init */
 void	count_alloc(t_map *map, char *file);
+void	init_player_angle(double *angle, char c);
 void    init_structs(t_params *par);
 void	init_t_map(t_params *par);
 void	destroy(t_params *par);
@@ -121,14 +130,18 @@ void	destroy(t_params *par);
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
 void	draw_vertical_grid(t_img *img, t_map *map);
 void	draw_horizontal_grid(t_img *img, t_map *map);
-void    draw_map(t_img *img, t_map *map);
+void    build_mini_map(t_img *img, t_map *map, t_params *par);
 
 /* Draw */
+void	clear_image(t_params *par);
 void	draw_player(t_img *img, double x, double y, int color);
-void	draw_fov(t_params *par, t_img *img, t_map *map, t_player *player, int color);
 
 /* Events */
 int		key_event(int keycode, t_params *par);
 int		is_wall(t_map *map, double new_x, double new_y);
+
+/* Raycast */
+void	draw_fov(t_params *par, t_map *map, t_player *player, int color);
+void	draw_3d(t_params *par, t_img *img, t_map *map, t_player *player, int color);
 
 #endif

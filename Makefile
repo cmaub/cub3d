@@ -6,7 +6,7 @@
 #    By: anvander <anvander@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/28 11:47:39 by cmaubert          #+#    #+#              #
-#    Updated: 2025/02/04 16:30:44 by anvander         ###   ########.fr        #
+#    Updated: 2025/02/06 16:29:41 by anvander         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,8 @@ SOURCES = main.c \
 			events.c \
 			init.c \
 			parse.c \
-			parse_utils.c 
+			parse_utils.c \
+			raycast.c
 
 SRCS = $(addprefix $(SRC_PATH)/,$(SOURCES))
 objects = $(addprefix $(OBJ_PATH)/,$(SOURCES:.c=.o))
