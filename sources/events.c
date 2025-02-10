@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 15:04:24 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/06 18:39:00 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:00:01 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int	is_wall(t_map *map, double new_x, double new_y)
 	int	grid_y;
 	int	ret;
 
-	grid_x = (int)(new_x / (WIDTH / map->length_max));
-	grid_y = (int)(new_y / (HEIGHT / map->nb_lines));
+	grid_x = (int)(new_x / (WIDTH_MINI / map->length_max));
+	grid_y = (int)(new_y / (HEIGHT_MINI / map->nb_lines));
 	ret = map->map_tab[grid_y][grid_x];
 	return (ret);
 }
@@ -78,13 +78,13 @@ void	move(t_map *map, t_player **player, double dist, int keycode)
 	}	
 	else if (keycode == A)
 	{
-		new_x = roundf((*player)->pos_x - sin((*player)->angle) * dist);
-		new_y = roundf((*player)->pos_y + cos((*player)->angle) * dist);
+		new_x = roundf((*player)->pos_x + sin((*player)->angle) * dist);
+		new_y = roundf((*player)->pos_y - cos((*player)->angle) * dist);
 	}
 	else if (keycode == D)
 	{
-		new_x = roundf((*player)->pos_x + sin((*player)->angle) * dist);
-		new_y = roundf((*player)->pos_y - cos((*player)->angle) * dist);
+		new_x = roundf((*player)->pos_x - sin((*player)->angle) * dist);
+		new_y = roundf((*player)->pos_y + cos((*player)->angle) * dist);
 	}
 	check_hit_and_update(map, new_x, new_y, player);
 }
@@ -138,24 +138,38 @@ int	key_event(int keycode, t_params *par)
         close_window(par);
 	else if ((keycode == W) || (keycode == S) || (keycode == A) || (keycode == D))
 	{
+		dprintf(2, "line %d, file %s\n", __LINE__, __FILE__);
+		draw_player(par->mini_map, par->player->pos_x, par->player->pos_y, 0);
+		draw_fov(par, par->mini_map, par->map, par->player, 0);
 		// draw_player(par->img, par->player->pos_x, par->player->pos_y, 0);
 		// draw_fov(par, par->img, par->map, par->player, 0);
 		clear_image(par);
 		move(par->map, &par->player, 10, keycode);
 		// draw_player(par->img, par->player->pos_x, par->player->pos_y, par->player->color);
+		// draw_fov(par, par->img, par->map, par->player, 255);
+		draw_player(par->mini_map, par->player->pos_x, par->player->pos_y, par->player->color);
+		draw_fov(par, par->mini_map, par->map, par->player, 255);
+		// draw_walls(par->img, par->map, &par->player->pos_x, &par->player->pos_y, 0, 0);
 		draw_3d(par, par->img, par->map, par->player, 255);
 	}
 	else if ((keycode == LEFT) || (keycode == RIGHT))
 	{
 		// draw_player(par->img, par->player->pos_x, par->player->pos_y, 0);
 		// draw_fov(par, par->img, par->map, par->player, 0);
+		draw_player(par->mini_map, par->player->pos_x, par->player->pos_y, 0);
+		draw_fov(par, par->mini_map, par->map, par->player, 0);
 		clear_image(par);
 		rotate(&par->player, 0.2, keycode);
+		draw_player(par->mini_map, par->player->pos_x, par->player->pos_y, par->player->color);
+		draw_fov(par, par->mini_map, par->map, par->player, 255);
 		// draw_player(par->img, par->player->pos_x, par->player->pos_y, par->player->color);
+		// draw_fov(par, par->img, par->map, par->player, 255);
 		draw_3d(par, par->img, par->map, par->player, 255);
 	}
-	// draw_vertical_grid(par->img, par->map);
-	// draw_horizontal_grid(par->img, par->map);
+	draw_vertical_grid(par->mini_map, par->map);
+	draw_horizontal_grid(par->mini_map, par->map);
 	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img->img, 0, 0);
+	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->mini_map->img, WIDTH - WIDTH_MINI, HEIGHT - HEIGHT_MINI);
+	
 	return (0);
 }

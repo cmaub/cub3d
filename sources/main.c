@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:59:12 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/06 18:38:51 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/10 12:54:52 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,24 @@ void	destroy(t_params *par)
 	// if (par)
 	// 	free_params(par);
 	exit(0);
+}
+void	color_image(t_params *par)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < HEIGHT)
+	{
+		x = 0;
+		while (x < WIDTH)
+		{
+			my_mlx_pixel_put(par->mini_map, x, y, 255);
+			// my_mlx_pixel_put(par->mini_map, x, y, 0);
+			x++;
+		}
+		y++;
+	}
 }
 
 int main(int ac, char **av)
@@ -63,9 +81,13 @@ int main(int ac, char **av)
 	build_mini_map(par->mini_map, par->map, par);
 	draw_vertical_grid(par->mini_map, par->map);
 	draw_horizontal_grid(par->mini_map, par->map);
-	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img->img, 0, 0);
+	dprintf(2, "line %d, file %s\n", __LINE__, __FILE__);
+	draw_fov(par, par->mini_map, par->map, par->player, 255);
+	// mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img->img, 0, 0);
 	draw_3d(par, par->img, par->map, par->player, 255);
+	dprintf(2, "%s, %d\n", __FILE__, __LINE__);
 	mlx_key_hook(par->win_ptr, key_event, par);
+	dprintf(2, "%s, %d\n", __FILE__, __LINE__);
     mlx_loop(par->mlx_ptr);
 	free(par);
     return (0);

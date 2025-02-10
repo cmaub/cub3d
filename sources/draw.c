@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:33:25 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/06 18:33:45 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/10 12:59:39 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,15 @@ void	clear_image(t_params *par)
 		x = 0;
 		while (x < WIDTH)
 		{
+			// my_mlx_pixel_put(par->img, x, y, 0);
 			my_mlx_pixel_put(par->img, x, y, 0);
-			my_mlx_pixel_put(par->mini_map, x, y, 0);
 			x++;
 		}
 		y++;
 	}
 }
 
-void	draw_vertical_grid(t_img *mini_map, t_map *map)
+void	draw_vertical_grid(t_img *img, t_map *map)
 {
 	int	i;
 	int	j;
@@ -57,9 +57,9 @@ void	draw_vertical_grid(t_img *mini_map, t_map *map)
 		if (x % map->unit_h == 0)
 		{
 			y = 0;
-			while (y <= HEIGHT)
+			while (y <= HEIGHT_MINI)
 			{
-				my_mlx_pixel_put(mini_map, x, y, rgb_to_int(255, 255, 255));
+				my_mlx_pixel_put(img, x, y, rgb_to_int(255, 255, 255));
 				y++;
 			}
 		}
@@ -68,7 +68,7 @@ void	draw_vertical_grid(t_img *mini_map, t_map *map)
 	}
 }
 
-void	draw_horizontal_grid(t_img *mini_map, t_map *map)
+void	draw_horizontal_grid(t_img *img, t_map *map)
 {
 	int	i;
 	int	j;
@@ -84,9 +84,9 @@ void	draw_horizontal_grid(t_img *mini_map, t_map *map)
 		if (y % map->unit_v == 0)
 		{
 			x = 0;
-			while (x <= WIDTH)
+			while (x <= WIDTH_MINI)
 			{
-				my_mlx_pixel_put(mini_map, x, y, rgb_to_int(255, 255, 255));
+				my_mlx_pixel_put(img, x, y, rgb_to_int(255, 255, 255));
 				x++;
 			}
 		}
@@ -95,7 +95,7 @@ void	draw_horizontal_grid(t_img *mini_map, t_map *map)
 	}
 }
 
-void	draw_player(t_img *mini_map, double x, double y, int color)
+void	draw_player(t_img *img, double x, double y, int color)
 {
 	int	i;
 	int	j;
@@ -107,7 +107,7 @@ void	draw_player(t_img *mini_map, double x, double y, int color)
 		j = -3;
 		while (j < 4)
 		{
-			my_mlx_pixel_put(mini_map, x - i,  y - j, color);
+			my_mlx_pixel_put(img, x - i,  y - j, color);
 			j++;
 		}
 		i++;
@@ -122,7 +122,7 @@ void	init_player_vars(t_map *map, t_player **player, double x, double y)
 	(*player)->dist_to_p = map->unit_h / 2 / tan(FOV / 2);
 }
 
-void	draw_walls(t_img *mini_map, t_map *map, double *x, double *y, double saved_x, double saved_y)
+void	draw_walls(t_img *img, t_map *map, double *x, double *y, double saved_x, double saved_y)
 {
 	*y = saved_y;
 	while (*y <= saved_y + map->unit_v)
@@ -130,7 +130,7 @@ void	draw_walls(t_img *mini_map, t_map *map, double *x, double *y, double saved_
 		*x = saved_x;
 		while (*x < saved_x + map->unit_h)
 		{
-			my_mlx_pixel_put(mini_map, *x, *y, rgb_to_int(128, 128, 128));
+			my_mlx_pixel_put(img, *x, *y, rgb_to_int(128, 128, 128));
 			(*x)++;
 		}
 		(*y)++;
@@ -166,7 +166,7 @@ void	draw_first_map(t_img *mini_map, t_map *map, t_player *player, int i, double
 		j++;
 		x = j * map->unit_h;
 		saved_x = x;
-		if (saved_x + map->unit_h > WIDTH)
+		if (saved_x + map->unit_h > WIDTH_MINI)
 			saved_x = 0;
 	}
 }
@@ -187,5 +187,5 @@ void    build_mini_map(t_img *mini_map, t_map *map, t_params *par)
 		y = i * map->unit_v;
 		saved_y = y;
 	}
-	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->mini_map->img, 20, 20);
+	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, mini_map->img, WIDTH - WIDTH_MINI, HEIGHT - HEIGHT_MINI);
 }

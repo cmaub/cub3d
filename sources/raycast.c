@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 15:04:52 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/06 18:40:32 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:00:03 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,51 +52,81 @@ void	draw_rays(t_params *par, t_img *img, t_map *map, double start_x, int color)
 		
 }
 
-void	draw_lines_3d(t_params *par, t_img *img, t_map *map, double start_x, int i, int color)
+void    draw_floor_and_ceilling(t_img *img, int ray, t_map *map)
+{
+    int i;
+
+    i = map->bot_pix;
+    while (i < HEIGHT)
+    {
+        my_mlx_pixel_put(img, ray, i, map->rgb_floor);
+        i++;
+    }
+    i = 0;
+    while (i < map->top_pix)
+    {
+        my_mlx_pixel_put(img, ray, i, map->rgb_ceil);
+        i++;       
+    }
+}
+
+void	draw_lines_3d(t_params *par, t_img *img, t_map *map, double start_x, int ray, int color)
 {
 	double	ray_x = par->player->pos_x;
 	double	ray_y = par->player->pos_y;
 	double	cos_angle = cos(start_x);
 	double	sin_angle = sin(start_x);
     double  dist;
-    double  height;
     double  start_y;
     double  end;
+    double  text_x;
+    double  text_y;
     (void)color;
-
-    height = 0;
+    
     start_y = 0;
     end = 0;
     dist = 0;
+    text_x = 0;
+    text_y = 0;
 	while (is_wall(map, ray_x, ray_y) != '1')
 	{
         ray_x += cos_angle;
 		ray_y += sin_angle;
 	}
-    // dist = correct_fish_eye(par->player->pos_x, par->player->pos_y, ray_x, ray_y, par);
-    dist = distance(ray_x - par->player->pos_x, ray_y - par->player->pos_y);
-    height = (par->map->unit_v / dist) * (WIDTH / 2);
-    start_y = (HEIGHT - height) / 2;
-    end = start_y + height;
+    dist = correct_fish_eye(par->player->pos_x, par->player->pos_y, ray_x, ray_y, par);
+    map->height = (par->map->unit_v / dist) * (WIDTH / 2);
+    map->top_pix = (HEIGHT / 2) - (map->height / 2);
+    map->bot_pix = (HEIGHT / 2) - (map->height / 2);
+    start_y = (HEIGHT - map->height) / 2;
+    end = start_y + map->height;
     while (start_y < end)
     {
-        my_mlx_pixel_put(img, i, start_y, 255);
+        // dprintf(2, "coucou\n");
+        color = *(int *)(map->wall_no->addr + (int)text_y * map->wall_no->l_len + (int)text_x * (map->wall_no->b_pix / 8));
+        my_mlx_pixel_put(img, ray, start_y, color);
+        // my_mlx_pixel_put(img, ray, start_y, 255);
+        if (text_y < map->wall_no->height)
+            text_y++;
+        else
+        {
+            text_y = 0;
+            text_x++;
+        }
+            
         start_y++;
-    }
-		
+    }	
 }
 
-void	draw_lines_2d(t_params *par, t_img *mini_map, t_map *map, double start_x, int i, int color)
+void	draw_lines_2d(t_params *par, t_img *img, t_map *map, double start_x, int color)
 {
 	double	ray_x = par->player->pos_x;
 	double	ray_y = par->player->pos_y;
 	double	cos_angle = cos(start_x);
 	double	sin_angle = sin(start_x);
-    (void)color;
 
 	while (is_wall(map, ray_x, ray_y) != '1')
 	{
-        my_mlx_pixel_put(mini_map, i, start_x, 255);
+        my_mlx_pixel_put(img, ray_x, ray_y, color);
         ray_x += cos_angle;
 		ray_y += sin_angle;
 	}	
@@ -106,43 +136,45 @@ void	draw_3d(t_params *par, t_img *img, t_map *map, t_player *player, int color)
 {
 	double fraction;
 	double	start_x;
-	int		i;
+	int		ray;
 
 	fraction = PI / 3 / WIDTH;
-	start_x = player->angle - (FOV / 2);
-	i = 0;
+	start_x = player->angle - PI / 6;
+	ray = 0;
     dprintf(2, "%s, %d\n", __FILE__, __LINE__);
-	while (i < WIDTH)
+	while (ray < WIDTH)
 	{
-		draw_lines_3d(par, img, map, start_x, i, color);
+        draw_floor_and_ceilling(img, ray, map);
+		draw_lines_3d(par, img, map, start_x, ray, color);
 		start_x += fraction;
-		i++;
+		ray++;
 	}
 	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, img->img, 0, 0);
     
 }
 
-void	draw_fov(t_params *par, t_map *map, t_player *player, int color)
+void	draw_fov(t_params *par, t_img *img, t_map *map, t_player *player, int color)
 {
 	double fraction;
 	double	start_x;
 	int		i;
 
 	fraction = PI / 3 / WIDTH;
-	start_x = player->angle - (FOV / 2);
+	start_x = player->angle - PI / 6;
 	i = 0;
+    dprintf(2, "%s, %d\n", __FILE__, __LINE__);
 	while (i < WIDTH)
 	{
-		draw_lines_2d(par, par->mini_map, map, start_x, i, color);
+		draw_lines_2d(par, img, map, start_x, color);
 		start_x += fraction;
 		i++;
 	}
-	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->mini_map->img, 0, 0);
+	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, img->img, WIDTH - WIDTH_MINI, HEIGHT - HEIGHT_MINI);
 }
 /*
 1. Finding the coordinate of A.  
    If the ray is facing up      
-     A.y = rounded_down(Py/64) * (64) - 1;
+     A.y = rounded_down(Py/64) * (64) - 1;wwwwssss
    If the ray is facing down
      A.y = rounded_down(Py/64) * (64) + 64;
 

@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:31:48 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/06 17:49:26 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/10 11:49:10 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,8 +151,8 @@ int	check_map(char **str, t_map *map, int index)
 		index += 1;
 	}
 	map->nb_lines = i;
-	map->unit_v = HEIGHT / map->nb_lines;
-	map->unit_h = WIDTH / map->length_max;
+	map->unit_v = HEIGHT_MINI / map->nb_lines;
+	map->unit_h = WIDTH_MINI/ map->length_max;
 	if (flag != 1)
 	{
 		printf("error line %d\n", __LINE__); //TODO

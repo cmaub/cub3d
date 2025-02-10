@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/06 18:40:41 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:02:20 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@
 # define TRUE 1
 # define FALSE 0
 
-# define HEIGHT 800
+# define HEIGHT_MINI 200
+# define WIDTH_MINI 320
+# define HEIGHT 832
 # define WIDTH 1280
 # define FOV 60
 # define PI 3.14159265359
@@ -40,14 +42,16 @@
 # include <limits.h>//
 # include <X11/keysym.h>
 
+typedef struct s_params t_params;
+
 typedef struct s_player
 {
 	double 	pos_x;
 	double 	pos_y;
 	int		color;
 	double	fov;
-	int		p_size;
-	int		dist_to_p;
+	int		p_size; // ?
+	int		dist_to_p; // ?
 	double	angle;
 }	t_player;
 
@@ -77,17 +81,21 @@ typedef struct s_map
 	int			color;
 	t_img		floor;
 	t_img		ceiling;
-	t_img		wall_no;
-	t_img		wall_so;
-	t_img		wall_ea;
-	t_img		wall_we;
+	t_img		*wall_no;
+	t_img		*wall_so;
+	t_img		*wall_ea;
+	t_img		*wall_we;
 	int			rgb_floor;
 	int			rgb_ceil;
+	double		top_pix;
+	double		bot_pix;
+	double		height;
 	char		*path_no;
 	char		*path_so;
 	char		*path_ea;
 	char		*path_we;
 	t_player	player;
+	t_params	*par;
 }	t_map;
 
 typedef struct s_ray
@@ -135,13 +143,14 @@ void    build_mini_map(t_img *img, t_map *map, t_params *par);
 /* Draw */
 void	clear_image(t_params *par);
 void	draw_player(t_img *img, double x, double y, int color);
+void	draw_walls(t_img *img, t_map *map, double *x, double *y, double saved_x, double saved_y);
 
 /* Events */
 int		key_event(int keycode, t_params *par);
 int		is_wall(t_map *map, double new_x, double new_y);
 
 /* Raycast */
-void	draw_fov(t_params *par, t_map *map, t_player *player, int color);
+void	draw_fov(t_params *par, t_img *img, t_map *map, t_player *player, int color);
 void	draw_3d(t_params *par, t_img *img, t_map *map, t_player *player, int color);
 
 #endif
