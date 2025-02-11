@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 15:04:52 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/10 18:00:03 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:44:19 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ float   correct_fish_eye(double x1, double y1, double x2, double y2, t_params *p
     double  angle;
     double  fix_dist;
     
-    dprintf(2, "player angle = %f\n", par->player->angle);
+    // dprintf(2, "player angle = %f\n", par->player->angle);
 
     delta_x = x2 - x1;
     delta_y = y2 - y1;
@@ -69,7 +69,14 @@ void    draw_floor_and_ceilling(t_img *img, int ray, t_map *map)
         i++;       
     }
 }
-
+#define M_PI       3.14159265358979323846
+#define radiansToDegrees(angleRadians) (angleRadians * 180.0 / M_PI)
+/*
+Cosinus  - sinus
+plus un angle est petit plus son cosinus est grand et plus on avance sur un axe horizontal (x), 
+plus le rayon va rencontrer de lignes verticales avant de touchr un mur
+donc quand le cosinus > sinus -> mur rencontre par la verticale
+*/
 void	draw_lines_3d(t_params *par, t_img *img, t_map *map, double start_x, int ray, int color)
 {
 	double	ray_x = par->player->pos_x;
@@ -80,7 +87,8 @@ void	draw_lines_3d(t_params *par, t_img *img, t_map *map, double start_x, int ra
     double  start_y;
     double  end;
     double  text_x;
-    double  text_y;
+    int  text_y;
+    double  incr_y;
     (void)color;
     
     start_y = 0;
@@ -88,33 +96,37 @@ void	draw_lines_3d(t_params *par, t_img *img, t_map *map, double start_x, int ra
     dist = 0;
     text_x = 0;
     text_y = 0;
+    
 	while (is_wall(map, ray_x, ray_y) != '1')
 	{
         ray_x += cos_angle;
 		ray_y += sin_angle;
 	}
     dist = correct_fish_eye(par->player->pos_x, par->player->pos_y, ray_x, ray_y, par);
+    
+    // hauteur du mur
     map->height = (par->map->unit_v / dist) * (WIDTH / 2);
     map->top_pix = (HEIGHT / 2) - (map->height / 2);
-    map->bot_pix = (HEIGHT / 2) - (map->height / 2);
-    start_y = (HEIGHT - map->height) / 2;
-    end = start_y + map->height;
+    map->bot_pix = (HEIGHT / 2) + (map->height / 2);
+    start_y = map->top_pix;
+    end = map->bot_pix;
+    
+    // pour trouver la colonne de texture
+    if ((cos_angle) > (sin_angle))
+        text_x = fmod(ray_y, par->map->unit_v) / par->map->unit_v * map->wall_no->width;
+    else
+        text_x = fmod(ray_x, par->map->unit_h) / par->map->unit_h * map->wall_no->width;
+     
+        
+    incr_y = 0;
     while (start_y < end)
     {
-        // dprintf(2, "coucou\n");
-        color = *(int *)(map->wall_no->addr + (int)text_y * map->wall_no->l_len + (int)text_x * (map->wall_no->b_pix / 8));
-        my_mlx_pixel_put(img, ray, start_y, color);
-        // my_mlx_pixel_put(img, ray, start_y, 255);
-        if (text_y < map->wall_no->height)
-            text_y++;
-        else
-        {
-            text_y = 0;
-            text_x++;
-        }
-            
+        text_y = (int)incr_y % map->wall_no->height;
+        incr_y += (double)map->wall_no->height / map->height;
+        color = *(int *)(map->wall_no->addr + text_y * map->wall_no->l_len + (int)text_x * (map->wall_no->b_pix / 8));
+        my_mlx_pixel_put(img, ray, start_y, color);            
         start_y++;
-    }	
+    }
 }
 
 void	draw_lines_2d(t_params *par, t_img *img, t_map *map, double start_x, int color)
@@ -141,7 +153,6 @@ void	draw_3d(t_params *par, t_img *img, t_map *map, t_player *player, int color)
 	fraction = PI / 3 / WIDTH;
 	start_x = player->angle - PI / 6;
 	ray = 0;
-    dprintf(2, "%s, %d\n", __FILE__, __LINE__);
 	while (ray < WIDTH)
 	{
         draw_floor_and_ceilling(img, ray, map);
