@@ -3,24 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   events.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 15:04:24 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/10 13:00:01 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:31:48 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	is_wall(t_map *map, double new_x, double new_y)
+char	is_wall(t_map *map, double new_x, double new_y)
 {
 	int	grid_x;
 	int	grid_y;
-	int	ret;
+	char	ret;
 
-	grid_x = (int)(new_x / (WIDTH_MINI / map->length_max));
-	grid_y = (int)(new_y / (HEIGHT_MINI / map->nb_lines));
+	grid_x = (int)(new_x / map->unit_h_mini);
+	grid_y = (int)(new_y / map->unit_v_mini);
 	ret = map->map_tab[grid_y][grid_x];
+	// if (grid_x < 0 || grid_x >= map->length_max || grid_y < 0 || grid_y >= map->nb_lines)
+	// 	return (49);
 	return (ret);
 }
 

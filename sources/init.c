@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:30:57 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/10 17:31:27 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:33:52 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,6 @@ TO DO: clean tout en cas d'erreur
 */
 void	get_texture_path(t_map *map)
 {
-	dprintf(2, "%s, %d\n", __FILE__, __LINE__);
-	dprintf(2, "map->par->mlx_ptr = %p\n", map->par->mlx_ptr);
-	dprintf(2, "map->path_no = %s\n", map->path_no);
-	dprintf(2, "map->wall_no->width = %d\n", map->wall_no->width);
-	dprintf(2, "map->wall_no->height = %d\n", map->wall_no->height);
 	map->wall_no->img = mlx_xpm_file_to_image(map->par->mlx_ptr, map->path_no,
 				&map->wall_no->width, &map->wall_no->height);
 	dprintf(2, "%s, %d\n", __FILE__, __LINE__);
@@ -130,6 +125,8 @@ void    init_structs(t_params *par)
     par->mlx_ptr = mlx_init();
 	par->map->height = 0;
 	par->map->par = par;
+	par->map->unit_v = HEIGHT / par->map->nb_lines;
+	par->map->unit_h = WIDTH / par->map->length_max;
 	// par->map->wall_no->width = 64;
 	// par->map->wall_no->height = 64;
 	dprintf(2, "%s, %d\n", __FILE__, __LINE__);

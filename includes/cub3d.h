@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/10 18:02:20 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:32:17 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,10 @@ typedef struct s_map
 {
 	int			length_max;
 	int			nb_lines;
-	int			unit_h;
+	int			unit_h_mini;
+	int			unit_v_mini;
 	int			unit_v;
+	int			unit_h;
 	char 		**parse_file;
 	char		**map_tab;
 	int			map_x; // pas utilse
@@ -147,7 +149,7 @@ void	draw_walls(t_img *img, t_map *map, double *x, double *y, double saved_x, do
 
 /* Events */
 int		key_event(int keycode, t_params *par);
-int		is_wall(t_map *map, double new_x, double new_y);
+char	is_wall(t_map *map, double new_x, double new_y);
 
 /* Raycast */
 void	draw_fov(t_params *par, t_img *img, t_map *map, t_player *player, int color);
