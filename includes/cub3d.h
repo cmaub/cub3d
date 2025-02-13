@@ -6,7 +6,7 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/12 17:32:17 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/13 15:01:52 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # define WIDTH_MINI 320
 # define HEIGHT 832
 # define WIDTH 1280
-# define FOV 60
+# define FOV 66
 # define PI 3.14159265359
 
 # define W 119
@@ -53,6 +53,14 @@ typedef struct s_player
 	int		p_size; // ?
 	int		dist_to_p; // ?
 	double	angle;
+	double	dir_x;
+	double	dir_y;
+	double	plane_x;
+	double	plane_y;
+	float	ray_dir_x0;
+	float	ray_dir_x1;
+	float	ray_dir_y0;
+	float	ray_dir_y1;
 }	t_player;
 
 typedef struct s_img
@@ -96,7 +104,7 @@ typedef struct s_map
 	char		*path_so;
 	char		*path_ea;
 	char		*path_we;
-	t_player	player;
+	t_player	*player;
 	t_params	*par;
 }	t_map;
 
@@ -132,7 +140,7 @@ void	print_tab(char **str, t_map *map);
 
 /* Init */
 void	count_alloc(t_map *map, char *file);
-void	init_player_angle(double *angle, char c);
+void	init_player_angle(t_player *player, char c);
 void    init_structs(t_params *par);
 void	init_t_map(t_params *par);
 void	destroy(t_params *par);
@@ -146,6 +154,7 @@ void    build_mini_map(t_img *img, t_map *map, t_params *par);
 void	clear_image(t_params *par);
 void	draw_player(t_img *img, double x, double y, int color);
 void	draw_walls(t_img *img, t_map *map, double *x, double *y, double saved_x, double saved_y);
+void    floor_casting(t_params *par, t_player *player, t_map *map);
 
 /* Events */
 int		key_event(int keycode, t_params *par);
@@ -154,5 +163,6 @@ char	is_wall(t_map *map, double new_x, double new_y);
 /* Raycast */
 void	draw_fov(t_params *par, t_img *img, t_map *map, t_player *player, int color);
 void	draw_3d(t_params *par, t_img *img, t_map *map, t_player *player, int color);
+void    wall_casting(t_params *par, t_player *player, t_map *map);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:59:12 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/10 12:54:52 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/13 16:25:11 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int main(int ac, char **av)
 	(void)ac;
 
 	par = try_malloc(sizeof(t_params));
+	
 	init_t_map(par);
 	// revoir verification exit
 	count_alloc(par->map, av[1]);
@@ -83,8 +84,12 @@ int main(int ac, char **av)
 	draw_horizontal_grid(par->mini_map, par->map);
 	dprintf(2, "line %d, file %s\n", __LINE__, __FILE__);
 	draw_fov(par, par->mini_map, par->map, par->player, 255);
+	// floor_casting(par, par->player, par->map);
+	dprintf(2, "line %d, file %s\n", __LINE__, __FILE__);
+	wall_casting(par, par->player, par->map);
+	dprintf(2, "line %d, file %s\n", __LINE__, __FILE__);
 	// mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img->img, 0, 0);
-	draw_3d(par, par->img, par->map, par->player, 255);
+	// draw_3d(par, par->img, par->map, par->player, 255);
 	dprintf(2, "%s, %d\n", __FILE__, __LINE__);
 	mlx_key_hook(par->win_ptr, key_event, par);
 	dprintf(2, "%s, %d\n", __FILE__, __LINE__);

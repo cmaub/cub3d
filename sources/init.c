@@ -6,7 +6,7 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:30:57 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/12 17:33:52 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/13 12:26:30 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,48 @@ void	count_alloc(t_map *map, char *file)
 /*
 cf unit circle in computer graphics.
 */
-void	init_player_angle(double *angle, char c)
+void	init_player_angle(t_player *player, char c)
 {
 	if (c == 'S')
-		*angle = PI / 2;
+	{
+		player->angle = PI / 2;
+		player->dir_x = 0;
+		player->dir_y = 1;
+		player->plane_x = 0.66;
+		player->plane_y = 0;
+	}
 	else if (c == 'N')
-		*angle = 3 * PI / 2;
+	{
+		player->angle = 3 * PI / 2;
+		player->dir_x = 0;
+		player->dir_y = -1;
+		player->plane_x = -0.66;
+		player->plane_y = 0;
+	}
 	else if (c == 'E')
-		*angle = 0;
+	{
+		player->angle = 0;
+		player->dir_x = 1;
+		player->dir_y = 0;
+		player->plane_x = 0;
+		player->plane_y = -0.66;
+	}
 	else if (c == 'W')
-		*angle = PI;
-	dprintf(2, "angle = %f\n", *angle);
+	{
+		player->angle = PI;
+		player->dir_x = -1;
+		player->dir_y = 0;
+		player->plane_x = 0.0;
+		player->plane_y = 0.66;
+	}	
+	dprintf(2, "angle = %f\n", player->angle);
 }
 
 void	init_t_map(t_params *par)
 {
 	par->map = try_malloc(sizeof(t_map));
+	par->player = try_malloc(sizeof(t_player));
+	par->map->player = par->player;
 	par->map->length_max = 0;
 	par->map->nb_lines = 0;
 	par->map->map_x = 0;
@@ -115,7 +141,6 @@ void    init_structs(t_params *par)
 	par->map->wall_ea = try_malloc(sizeof(t_img));
 	par->map->wall_we = try_malloc(sizeof(t_img));
 	par->mini_map = try_malloc(sizeof(t_img));
-	par->player = try_malloc(sizeof(t_player));
 	par->ray = try_malloc(sizeof(t_ray));
 	par->img->player = par->player;
 	img = par->img;
@@ -156,5 +181,5 @@ void    init_structs(t_params *par)
 	par->player->pos_y = 0; // 
     par->player->color = rgb_to_int(255, 0, 0);
 	par->player->fov = FOV;
-	par->player->angle = par->map->player.angle;
+	par->player->angle = par->map->player->angle;
 }

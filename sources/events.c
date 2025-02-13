@@ -6,7 +6,7 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 15:04:24 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/12 17:31:48 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/13 16:25:23 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,30 +143,25 @@ int	key_event(int keycode, t_params *par)
 		dprintf(2, "line %d, file %s\n", __LINE__, __FILE__);
 		draw_player(par->mini_map, par->player->pos_x, par->player->pos_y, 0);
 		draw_fov(par, par->mini_map, par->map, par->player, 0);
-		// draw_player(par->img, par->player->pos_x, par->player->pos_y, 0);
-		// draw_fov(par, par->img, par->map, par->player, 0);
 		clear_image(par);
 		move(par->map, &par->player, 10, keycode);
-		// draw_player(par->img, par->player->pos_x, par->player->pos_y, par->player->color);
-		// draw_fov(par, par->img, par->map, par->player, 255);
 		draw_player(par->mini_map, par->player->pos_x, par->player->pos_y, par->player->color);
 		draw_fov(par, par->mini_map, par->map, par->player, 255);
-		// draw_walls(par->img, par->map, &par->player->pos_x, &par->player->pos_y, 0, 0);
-		draw_3d(par, par->img, par->map, par->player, 255);
+		// draw_3d(par, par->img, par->map, par->player, 255);
+		// floor_casting(par, par->player, par->map);
+		wall_casting(par, par->player, par->map);
 	}
 	else if ((keycode == LEFT) || (keycode == RIGHT))
 	{
-		// draw_player(par->img, par->player->pos_x, par->player->pos_y, 0);
-		// draw_fov(par, par->img, par->map, par->player, 0);
 		draw_player(par->mini_map, par->player->pos_x, par->player->pos_y, 0);
 		draw_fov(par, par->mini_map, par->map, par->player, 0);
 		clear_image(par);
 		rotate(&par->player, 0.2, keycode);
 		draw_player(par->mini_map, par->player->pos_x, par->player->pos_y, par->player->color);
 		draw_fov(par, par->mini_map, par->map, par->player, 255);
-		// draw_player(par->img, par->player->pos_x, par->player->pos_y, par->player->color);
-		// draw_fov(par, par->img, par->map, par->player, 255);
-		draw_3d(par, par->img, par->map, par->player, 255);
+		// draw_3d(par, par->img, par->map, par->player, 255);
+		// floor_casting(par, par->player, par->map);
+		wall_casting(par, par->player, par->map);
 	}
 	draw_vertical_grid(par->mini_map, par->map);
 	draw_horizontal_grid(par->mini_map, par->map);

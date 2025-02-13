@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:34:35 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/06 12:35:59 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/13 15:16:41 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,17 @@ void	print_tab(char **str, t_map *map)
 void	print_map(char **str)
 {
 	int	i;
+	int	j;
 
 	i = 0;
 	while (str[i])
 	{
-		printf("map[%d] = %s\n", i, str[i]);
+		j = 0;
+		while (str[i][j])
+		{
+			printf("map[%d][%d] = %c\n", i, j, str[i][j]);
+			j++;
+		}
 		i++;
 	}
 }

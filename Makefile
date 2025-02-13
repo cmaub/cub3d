@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: anvander <anvander@student.42.fr>          +#+  +:+       +#+         #
+#    By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/28 11:47:39 by cmaubert          #+#    #+#              #
-#    Updated: 2025/02/06 16:29:41 by anvander         ###   ########.fr        #
+#    Updated: 2025/02/13 10:57:08 by cmaubert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,8 @@ SOURCES = main.c \
 			init.c \
 			parse.c \
 			parse_utils.c \
-			raycast.c
+			raycast_2D.c \
+			raycast_3D.c
 
 SRCS = $(addprefix $(SRC_PATH)/,$(SOURCES))
 objects = $(addprefix $(OBJ_PATH)/,$(SOURCES:.c=.o))

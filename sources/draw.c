@@ -6,7 +6,7 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:33:25 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/12 17:31:48 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:58:25 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,10 +116,18 @@ void	draw_player(t_img *img, double x, double y, int color)
 
 void	init_player_vars(t_map *map, t_player **player, double x, double y)
 {
-	(*player)->pos_x = x + map->unit_h_mini / 2;
-	(*player)->pos_y = y + map->unit_v_mini / 2;
+	// (*player)->pos_x = x + map->unit_h_mini / 2;
+	// (*player)->pos_y = y + map->unit_v_mini / 2;
+	// // (*player)->pos_x = x;
+	// // (*player)->pos_y = y;
+	// (*player)->p_size = map->unit_v_mini / 2;
+	// (*player)->dist_to_p = map->unit_h_mini / 2 / tan(FOV / 2);
+	(*player)->pos_x = x * (double)map->unit_h_mini + (double)map->unit_h_mini / 2;
+	(*player)->pos_y = y * (double)map->unit_v_mini + (double)map->unit_v_mini / 2;
 	(*player)->p_size = map->unit_v_mini / 2;
 	(*player)->dist_to_p = map->unit_h_mini / 2 / tan(FOV / 2);
+	dprintf(2, "**** player pos_x = %f, pos_y = %f\n", (*player)->pos_x, (*player)->pos_y);
+
 }
 
 void	draw_walls(t_img *img, t_map *map, double *x, double *y, double saved_x, double saved_y)
@@ -158,10 +166,11 @@ void	draw_first_map(t_img *mini_map, t_map *map, t_player *player, int i, double
 			draw_walls(mini_map, map, &x, &y, saved_x, saved_y);
 		if (map->map_tab[i][j] && ft_strchr("NEWS", map->map_tab[i][j]))
 		{
-			x_p = saved_x + map->unit_h_mini / 2;
-			x_y = saved_y + map->unit_v_mini / 2;
+			x_p = saved_x + map->unit_h / 2; //
+			x_y = saved_y + map->unit_v / 2;
 			draw_player(mini_map, x_p, x_y, rgb_to_int(255, 0, 0));
-			init_player_vars(map, &player, saved_x, saved_y);
+			dprintf(2, "i %d, j %d, x_p %f, x_y %f, saved_x %f, saved_y %f\n", i, j, x_p, x_y, saved_x, saved_y);
+			init_player_vars(map, &player, j, i);
 		}
 		j++;
 		x = j * map->unit_h_mini;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycast.c                                          :+:      :+:    :+:   */
+/*   raycast_2D.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 15:04:52 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/12 18:25:44 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:46:47 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void    draw_floor_and_ceilling(t_img *img, int ray, t_map *map)
         i++;       
     }
 }
-#define M_PI       3.14159265358979323846
+// #define M_PI       3.14159265358979323846
 #define radiansToDegrees(angleRadians) (angleRadians * 180.0 / M_PI)
 /*
 Cosinus  - sinus
@@ -156,7 +156,7 @@ void	draw_lines_3d(t_params *par, t_img *img, t_map *map, double start_x, int ra
     int  text_y;
     double  incr_y;
     (void)color;
-    
+
     start_y = 0;
     end = 0;
     dist = 0;
@@ -193,7 +193,7 @@ void	draw_lines_3d(t_params *par, t_img *img, t_map *map, double start_x, int ra
         text_y = (int)incr_y % map->wall_no->height;
         incr_y += (double)map->wall_no->height / map->height;
         color = *(int *)(map->wall_no->addr + text_y * map->wall_no->l_len + text_x * (map->wall_no->b_pix / 8));
-        my_mlx_pixel_put(img, ray, start_y, color);            
+        my_mlx_pixel_put(img, ray, start_y, color); //calculer la texture a partir du point sur le mur jusquau point du joueur
         start_y++;
     }
 }
@@ -243,7 +243,7 @@ void	draw_fov(t_params *par, t_img *img, t_map *map, t_player *player, int color
 	fraction = PI / 3 / WIDTH;
 	start_x = player->angle - PI / 6;
 	i = 0;
-    dprintf(2, "%s, %d\n", __FILE__, __LINE__);
+    // dprintf(2, "%s, %d\n", __FILE__, __LINE__);
 	while (i < WIDTH)
 	{
 		draw_lines_2d(par, img, map, start_x, color);

@@ -6,7 +6,7 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:31:48 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/12 17:31:48 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/13 15:41:34 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	check_map(char **str, t_map *map, int index)
 					{
 						if (str[i][j - 1] && !ft_strchr("1 ", str[i][j - 1]))
 						{
-							printf("error line %d\n", __LINE__);; //TODO
+							printf("error line %d\n", __LINE__); //TODO
 							return (FALSE);
 						}
 					}
@@ -136,7 +136,7 @@ int	check_map(char **str, t_map *map, int index)
 				}
 				if (ft_strchr("NEWS", str[i][j]))
 				{
-					init_player_angle(&map->player.angle, str[i][j]);
+					init_player_angle(map->player, str[i][j]);
 					flag++;
 				}
 			}
@@ -158,6 +158,7 @@ int	check_map(char **str, t_map *map, int index)
 		printf("error line %d\n", __LINE__); //TODO
 		return (FALSE);
 	}
+	printf("******* map->player->plane_x = %f, map->player->dir_x = %f\n", map->player->plane_x, map->player->dir_x);
 	replace_spaces(str, map);
 	map->map_tab = str;
 	// print_map(str);
@@ -252,6 +253,7 @@ int	check_av(t_map *map, char **str, int count)
 			i++;
 	str += i;
 	check_map(str, map, i);
+	
 	return (TRUE);
 }
 
