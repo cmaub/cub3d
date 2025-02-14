@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_2D.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 15:04:52 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/13 17:46:47 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/14 10:43:19 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,8 +200,8 @@ void	draw_lines_3d(t_params *par, t_img *img, t_map *map, double start_x, int ra
 
 void	draw_lines_2d(t_params *par, t_img *img, t_map *map, double start_x, int color)
 {
-	double	ray_x = par->player->pos_x;
-	double	ray_y = par->player->pos_y;
+	double	ray_x = par->player->mini_pos_x;
+	double	ray_y = par->player->mini_pos_y;
 	double	cos_angle = cos(start_x);
 	double	sin_angle = sin(start_x);
 

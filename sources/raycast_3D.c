@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_3D.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:57:11 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/13 17:58:29 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/14 13:02:24 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,66 +107,67 @@ void    wall_casting(t_params *par, t_player *player, t_map *map)
     while (x < WIDTH)
     {
         camera_x = 2 * x / (double)WIDTH - 1;
-        ray_dir_x = player->dir_x + player->plane_x * camera_x;
-        ray_dir_y = player->dir_y + player->plane_y * camera_x;
+        ray_dir_x = player->dir_x + player->plane_x * cos(x);
+        ray_dir_y = player->dir_y + player->plane_y * sin(x);
         // dprintf(2, "ray_dir_x = %f, player->dir_x %f, player->plane_x = %f, camera_x = %f\n", ray_dir_x, player->dir_x, player->plane_x, camera_x);
         // dprintf(2, "ray_dir_y = %f, player->dir_y %f, player->plane_y = %f, camera_y = %f\n", ray_dir_y, player->dir_y, player->plane_y, camera_x);
         
-        map_x = (int)(player->pos_x / map->unit_v_mini);
-        map_y = (int)(player->pos_y / map->unit_h_mini);
-        // map_x = 1;
-        // map_y = 2;
+        map_x = (int)par->player->pos_x;
+        map_y = (int)par->player->pos_y;
         // dprintf(2, "map_x %d, map_y %d, player->pox_x = %f, player->pos_y = %f\n", map_x, map_y, player->pos_x, player->pos_y);
         
-        if (ray_dir_x != 0)
-            delta_dist_x = fabs(1 / ray_dir_x);
-        else 
-            delta_dist_x = 1e30;
-        if (ray_dir_y != 0)
-            delta_dist_y = fabs(1 / ray_dir_y);
-        else
-            delta_dist_y = 1e30;
-        // dprintf(2, "delat_dist_x = %f, delta_dist_y = %f\n", delta_dist_x, delta_dist_y);
+        // if (ray_dir_x != 0)
+            delta_dist_x = sqrt(1 + (ray_dir_y * ray_dir_y) / (ray_dir_x * ray_dir_x));
+        // else 
+        //     delta_dist_x = 1e30;
+        // if (ray_dir_y != 0)
+            delta_dist_y = sqrt(1 + (ray_dir_x * ray_dir_x) / (ray_dir_y * ray_dir_y));
+        // else
+        //     delta_dist_y = 1e30;
+        // dprintf(2, "ray_dir_x = %f, ray_dir_y = %f, delta_dist_x = %f, delta_dist_y = %f\n", ray_dir_x, ray_dir_y, delta_dist_x, delta_dist_y);
         
         // calcul du step
         if (ray_dir_x < 0)
         {
             step_x = -1;
-            sidedist_x = (player->pos_x - map_x) * delta_dist_x;
+            sidedist_x = (player->pos_x - (double)map_x) * delta_dist_x;
         }
         else
         {
             step_x = 1;
-            sidedist_x = (map_x + 1.0 - player->pos_x) * delta_dist_x;
+            sidedist_x = ((double)map_x + 1.0 - player->pos_x) * delta_dist_x;
         }
         if (ray_dir_y < 0)
         {
             step_y = -1;
-            sidedist_y = (player->pos_y - map_y) * delta_dist_y;
+            sidedist_y = (player->pos_y - (double)map_y) * delta_dist_y;
         }
         else
         {
             step_y = 1;
-            sidedist_y = (map_y + 1.0 - player->pos_y) * delta_dist_y;
+            sidedist_y = ((double)map_y + 1.0 - player->pos_y) * delta_dist_y;
         }
+        dprintf(2, "x = %d, WIDTH = %d, camera_x = %f\n", x, WIDTH, camera_x);
+        dprintf(2, "ray_dir_x = %f, ray_dir_y = %f, sidedist_x = %f, sidedist_y = %f, delta_dist_x = %f, delta_dist_y = %f\n", ray_dir_x, ray_dir_y, sidedist_x, sidedist_y, delta_dist_x, delta_dist_y);
         
         // perform DDA
         while (hit == 0)
         {
+            // dprintf(2, "hit = %d\n", hit);
             // dprintf(2, "map->map_tab[%d][%d] = %c, line %d, file %s\n", map_y, map_x, map->map_tab[map_y][map_x], __LINE__, __FILE__);
             if (sidedist_x < sidedist_y)
             {
                 sidedist_x += delta_dist_x;
                 map_x += step_x;
                 side = 0;
-                dprintf(2, "step_x = %d\n", step_x);
+                // dprintf(2, "step_x = %d\n", step_x);
             }
             else
             {
                 sidedist_y += delta_dist_y;
                 map_y += step_y;
                 side = 1;
-                dprintf(2, "step_y = %d\n", step_y);
+                // dprintf(2, "step_y = %d\n", step_y);
             }
             if (map_x > map->length_max || map_y > map->nb_lines || map->map_tab[map_y][map_x] == '1')
             {
@@ -175,16 +176,17 @@ void    wall_casting(t_params *par, t_player *player, t_map *map)
                 break ;
             }
         }
-    
+        // dprintf(2, "hit = %d, sidedist_x = %f, sidedist_y = %f\n", hit, sidedist_x, sidedist_y);
         //calculate the distance of perpendicular ray to remove fish eye
         if (side == 0)
             perp_wall_dist = sidedist_x - delta_dist_x;
         else
             perp_wall_dist = sidedist_y - delta_dist_y;
+        // dprintf(2, "per_wall_dist = %f, HEIGHT = %d\n", perp_wall_dist, HEIGHT);
         
         //Calculate height of line to draw
         line_height = (int)(HEIGHT / perp_wall_dist);
-        // dprintf(2, "sidedist_x = %f, delta_dist_x %f, HEIGHT = %d, par_wall_dist = %f, line_height = %d\n", sidedist_x, delta_dist_x, HEIGHT, perp_wall_dist, line_height);
+        dprintf(2, "sidedist_x = %f, delta_dist_x %f, HEIGHT = %d, par_wall_dist = %f, line_height = %d\n", sidedist_x, delta_dist_x, HEIGHT, perp_wall_dist, line_height);
     
         //Calculate bottom pixel and top pixel to fill in current column
         draw_start = - line_height / 2 + HEIGHT / 2;
@@ -199,9 +201,9 @@ void    wall_casting(t_params *par, t_player *player, t_map *map)
     
         //Calculate value of wall_x
         if (side == 0)
-            wall_x = player->pos_y + perp_wall_dist + ray_dir_y;
+            wall_x = player->pos_y + perp_wall_dist * ray_dir_y;
         else
-            wall_x = player->pos_x + perp_wall_dist + ray_dir_x;
+            wall_x = player->pos_x + perp_wall_dist * ray_dir_x;
         wall_x -= floor(wall_x); // partie fractionnaire de wall_x
     
         //x coordinate on the texture
@@ -216,6 +218,7 @@ void    wall_casting(t_params *par, t_player *player, t_map *map)
         
         tex_pos = (draw_start - HEIGHT / 2 + line_height / 2) * step;
         y = draw_start;
+        // dprintf(2, "line_height = %d, draw_start = %d, draw_end = %d\n", line_height, draw_start, draw_end);
         while (y < draw_end)
         {
             // dprintf(2, "y < draw_end\n");

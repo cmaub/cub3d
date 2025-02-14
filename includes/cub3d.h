@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/13 15:01:52 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/14 10:42:14 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ typedef struct s_player
 {
 	double 	pos_x;
 	double 	pos_y;
+	double	mini_pos_x;
+	double	mini_pos_y;
 	int		color;
 	double	fov;
 	int		p_size; // ?
@@ -140,7 +142,7 @@ void	print_tab(char **str, t_map *map);
 
 /* Init */
 void	count_alloc(t_map *map, char *file);
-void	init_player_angle(t_player *player, char c);
+void	init_player_angle(t_player *player, char c, int i, int j);
 void    init_structs(t_params *par);
 void	init_t_map(t_params *par);
 void	destroy(t_params *par);

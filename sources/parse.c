@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:31:48 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/13 15:41:34 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/14 10:37:17 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ int	check_map(char **str, t_map *map, int index)
 				}
 				if (ft_strchr("NEWS", str[i][j]))
 				{
-					init_player_angle(map->player, str[i][j]);
+					init_player_angle(map->player, str[i][j], i, j);
 					flag++;
 				}
 			}

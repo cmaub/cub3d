@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:59:12 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/13 16:25:11 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/14 11:07:25 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,14 +80,15 @@ int main(int ac, char **av)
 	// print_tab(par->map->map_tab, par->map);
     init_structs(par);
 	build_mini_map(par->mini_map, par->map, par);
+	dprintf(2, "line %d, file %s, par->player->pos_x = %f\n", __LINE__, __FILE__, par->player->pos_x);
 	draw_vertical_grid(par->mini_map, par->map);
 	draw_horizontal_grid(par->mini_map, par->map);
-	dprintf(2, "line %d, file %s\n", __LINE__, __FILE__);
+	// dprintf(2, "line %d, file %s\n", __LINE__, __FILE__);
 	draw_fov(par, par->mini_map, par->map, par->player, 255);
 	// floor_casting(par, par->player, par->map);
-	dprintf(2, "line %d, file %s\n", __LINE__, __FILE__);
+	dprintf(2, "line %d, file %s, par->player->pos_x = %f\n", __LINE__, __FILE__, par->player->pos_x);
 	wall_casting(par, par->player, par->map);
-	dprintf(2, "line %d, file %s\n", __LINE__, __FILE__);
+	// dprintf(2, "line %d, file %s\n", __LINE__, __FILE__);
 	// mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img->img, 0, 0);
 	// draw_3d(par, par->img, par->map, par->player, 255);
 	dprintf(2, "%s, %d\n", __FILE__, __LINE__);

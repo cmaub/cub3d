@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:30:57 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/13 12:26:30 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/14 11:09:39 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,13 @@ void	count_alloc(t_map *map, char *file)
 /*
 cf unit circle in computer graphics.
 */
-void	init_player_angle(t_player *player, char c)
+void	init_player_angle(t_player *player, char c, int i, int j)
 {
 	if (c == 'S')
 	{
 		player->angle = PI / 2;
+		player->pos_x = (double)i + 0.5;
+		player->pos_y = (double)j + 0.5;
 		player->dir_x = 0;
 		player->dir_y = 1;
 		player->plane_x = 0.66;
@@ -50,6 +52,8 @@ void	init_player_angle(t_player *player, char c)
 	else if (c == 'N')
 	{
 		player->angle = 3 * PI / 2;
+		player->pos_x = (double)i + 0.5;
+		player->pos_y = (double)j + 0.5;
 		player->dir_x = 0;
 		player->dir_y = -1;
 		player->plane_x = -0.66;
@@ -58,6 +62,8 @@ void	init_player_angle(t_player *player, char c)
 	else if (c == 'E')
 	{
 		player->angle = 0;
+		player->pos_x = (double)i + 0.5;
+		player->pos_y = (double)j + 0.5;
 		player->dir_x = 1;
 		player->dir_y = 0;
 		player->plane_x = 0;
@@ -66,12 +72,14 @@ void	init_player_angle(t_player *player, char c)
 	else if (c == 'W')
 	{
 		player->angle = PI;
+		player->pos_x = (double)i + 0.5;
+		player->pos_y = (double)j + 0.5;
 		player->dir_x = -1;
 		player->dir_y = 0;
 		player->plane_x = 0.0;
 		player->plane_y = 0.66;
-	}	
-	dprintf(2, "angle = %f\n", player->angle);
+	}
+	dprintf(2, "(%s, %d), player->pos_x = %f, player->pos_y = %f\n", __FILE__, __LINE__, player->pos_x, player->pos_y);
 }
 
 void	init_t_map(t_params *par)
@@ -143,6 +151,7 @@ void    init_structs(t_params *par)
 	par->mini_map = try_malloc(sizeof(t_img));
 	par->ray = try_malloc(sizeof(t_ray));
 	par->img->player = par->player;
+	dprintf(2, "(%s, %d), par->player->pos_x = %f\n", __FILE__, __LINE__, par->player->pos_x);
 	img = par->img;
 	mini_map = par->mini_map;
     par->mlx_ptr = NULL;
@@ -177,8 +186,6 @@ void    init_structs(t_params *par)
         img->addr = mlx_get_data_addr(img->img, &img->b_pix, &img->l_len, &img->endian);
 		mini_map->addr = mlx_get_data_addr(mini_map->img, &mini_map->b_pix, &mini_map->l_len, &mini_map->endian);
     }
-	par->player->pos_x = 0; // 
-	par->player->pos_y = 0; // 
     par->player->color = rgb_to_int(255, 0, 0);
 	par->player->fov = FOV;
 	par->player->angle = par->map->player->angle;

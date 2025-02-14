@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:33:25 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/13 17:58:25 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/14 11:00:32 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,17 +116,16 @@ void	draw_player(t_img *img, double x, double y, int color)
 
 void	init_player_vars(t_map *map, t_player **player, double x, double y)
 {
-	// (*player)->pos_x = x + map->unit_h_mini / 2;
-	// (*player)->pos_y = y + map->unit_v_mini / 2;
-	// // (*player)->pos_x = x;
-	// // (*player)->pos_y = y;
+	// (*player)->pos_x = x + 0.5;
+	// (*player)->pos_y = y + 0.5;
+	// (*player)->pos_x = x;
+	// (*player)->pos_y = y;
 	// (*player)->p_size = map->unit_v_mini / 2;
 	// (*player)->dist_to_p = map->unit_h_mini / 2 / tan(FOV / 2);
-	(*player)->pos_x = x * (double)map->unit_h_mini + (double)map->unit_h_mini / 2;
-	(*player)->pos_y = y * (double)map->unit_v_mini + (double)map->unit_v_mini / 2;
+	(*player)->mini_pos_x = x + map->unit_h_mini / 2;
+	(*player)->mini_pos_y = y + map->unit_v_mini / 2;
 	(*player)->p_size = map->unit_v_mini / 2;
 	(*player)->dist_to_p = map->unit_h_mini / 2 / tan(FOV / 2);
-	dprintf(2, "**** player pos_x = %f, pos_y = %f\n", (*player)->pos_x, (*player)->pos_y);
 
 }
 
@@ -150,7 +149,7 @@ void	draw_first_map(t_img *mini_map, t_map *map, t_player *player, int i, double
 	int		j;
 	double	x;
 	double	x_p;
-	double	x_y;
+	double	y_p;
 	double	saved_x;
 	(void)y;
 	
@@ -158,7 +157,7 @@ void	draw_first_map(t_img *mini_map, t_map *map, t_player *player, int i, double
 	x = 0.0;
 	saved_x = x;
 	x_p = 0;
-	x_y = 0;
+	y_p = 0;
 	
 	while (j < map->length_max)
 	{
@@ -167,10 +166,8 @@ void	draw_first_map(t_img *mini_map, t_map *map, t_player *player, int i, double
 		if (map->map_tab[i][j] && ft_strchr("NEWS", map->map_tab[i][j]))
 		{
 			x_p = saved_x + map->unit_h / 2; //
-			x_y = saved_y + map->unit_v / 2;
-			draw_player(mini_map, x_p, x_y, rgb_to_int(255, 0, 0));
-			dprintf(2, "i %d, j %d, x_p %f, x_y %f, saved_x %f, saved_y %f\n", i, j, x_p, x_y, saved_x, saved_y);
-			init_player_vars(map, &player, j, i);
+			y_p = saved_y + map->unit_v / 2;
+			init_player_vars(map, &player, saved_x, saved_y);
 		}
 		j++;
 		x = j * map->unit_h_mini;
@@ -192,6 +189,7 @@ void    build_mini_map(t_img *mini_map, t_map *map, t_params *par)
 	while (i < map->nb_lines)
 	{
 		draw_first_map(mini_map, map, par->player, i, y, saved_y);
+		draw_player(mini_map, par->player->mini_pos_x, par->player->mini_pos_y, rgb_to_int(255, 0, 0));
 		i++;
 		y = i * map->unit_v_mini;
 		saved_y = y;
