@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:33:25 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/14 11:00:32 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/14 17:05:34 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ void	init_player_vars(t_map *map, t_player **player, double x, double y)
 	(*player)->mini_pos_y = y + map->unit_v_mini / 2;
 	(*player)->p_size = map->unit_v_mini / 2;
 	(*player)->dist_to_p = map->unit_h_mini / 2 / tan(FOV / 2);
+	dprintf(2, "(%s, %d), (*player)->mini_pos_x = %f, (*player)->mini_pos_y = %f\n", __FILE__, __LINE__, (*player)->mini_pos_x, (*player)->mini_pos_y);
 
 }
 

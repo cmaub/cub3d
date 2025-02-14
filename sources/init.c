@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:30:57 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/14 11:09:39 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/14 15:34:54 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ void	init_player_angle(t_player *player, char c, int i, int j)
 	if (c == 'S')
 	{
 		player->angle = PI / 2;
-		player->pos_x = (double)i + 0.5;
-		player->pos_y = (double)j + 0.5;
+		player->pos_x = (double)j + 0.5;
+		player->pos_y = (double)i + 0.5;
 		player->dir_x = 0;
 		player->dir_y = 1;
 		player->plane_x = 0.66;
@@ -52,28 +52,28 @@ void	init_player_angle(t_player *player, char c, int i, int j)
 	else if (c == 'N')
 	{
 		player->angle = 3 * PI / 2;
-		player->pos_x = (double)i + 0.5;
-		player->pos_y = (double)j + 0.5;
+		player->pos_x = (double)j + 0.5;
+		player->pos_y = (double)i + 0.5;
 		player->dir_x = 0;
 		player->dir_y = -1;
-		player->plane_x = -0.66;
+		player->plane_x = 0.66;
 		player->plane_y = 0;
 	}
 	else if (c == 'E')
 	{
 		player->angle = 0;
-		player->pos_x = (double)i + 0.5;
-		player->pos_y = (double)j + 0.5;
+		player->pos_x = (double)j + 0.5;
+		player->pos_y = (double)i + 0.5;
 		player->dir_x = 1;
 		player->dir_y = 0;
 		player->plane_x = 0;
-		player->plane_y = -0.66;
+		player->plane_y = 0.66;
 	}
 	else if (c == 'W')
 	{
 		player->angle = PI;
-		player->pos_x = (double)i + 0.5;
-		player->pos_y = (double)j + 0.5;
+		player->pos_x = (double)j + 0.5;
+		player->pos_y = (double)i + 0.5;
 		player->dir_x = -1;
 		player->dir_y = 0;
 		player->plane_x = 0.0;
