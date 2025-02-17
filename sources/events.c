@@ -6,7 +6,7 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 15:04:24 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/17 12:23:56 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/17 16:01:26 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,24 +38,11 @@ void	check_hit_and_update(t_map *map, double mini_x, double mini_y, double x, do
 	j = -2;
 	(void)mini_x;
 	(void)mini_y;
-	// while (i < 3)
-	// {
-	// 	j = -2;
-	// 	while (j < 3)
-	// 	{
-	// 		if (is_wall(map, mini_x - i, mini_y - j) != '1')
-	// 			j++;
-	// 		else
-	// 			return ;
-	// 	}
-	// 	i++;
-	// }
-	if (/*i == 3 && j == 3 && */map->map_tab[(int)y][(int)x] != '1')
+	if (map->map_tab[(int)y][(int)x] != '1')
 	{
 		dprintf(2, "map->map_tab[%f][%f] = %c\n", y, x, map->map_tab[(int)y][(int)x]);
 		(*player)->pos_x = x;
 		(*player)->pos_y = y;
-		
 		// (*player)->mini_pos_x = mini_x;
 		// (*player)->mini_pos_y = mini_y;
 	}
@@ -80,7 +67,7 @@ S => move down
 A => move to the right
 D => move to the left
 */
-void	move_mini(t_map *map, t_player **player, double dist, int keycode)
+void	move_mini(t_map *map, t_player **player, double dist)
 {
 	double	new_x;
 	double	new_y;
@@ -95,26 +82,25 @@ void	move_mini(t_map *map, t_player **player, double dist, int keycode)
 	if ((*player)->angle < 0)
 		(*player)->angle += 2 * PI;
 	
-	printf("dir_y = %f, dir_x = %f\n", (*player)->dir_y, (*player)->dir_x);
-	printf("pos_y = %f, pos_x = %f\n", (*player)->pos_y, (*player)->pos_x);
-	if (keycode == W)
+	printf("(*player)->move_up = %d, (*player)->move_down = %d\n", (*player)->move_up, (*player)->move_down);
+	if ((*player)->move_up)
 	{
 		new_x = (*player)->pos_x + cos((*player)->angle) * dist;
 		new_y = (*player)->pos_y + sin((*player)->angle) * dist;
 		// new_mini_x = roundf((*player)->mini_pos_x + cos((*player)->angle) * dist);
 		// new_mini_y = roundf((*player)->mini_pos_y + sin((*player)->angle) * dist);
 	}
-	else if (keycode == S)
+	else if ((*player)->move_down)
 	{
 		new_x = (*player)->pos_x - cos((*player)->angle) * dist;
 		new_y = (*player)->pos_y - sin((*player)->angle) * dist;
 	}	
-	else if (keycode == A)
+	else if ((*player)->move_left)
 	{
 		new_x = (*player)->pos_x + sin((*player)->angle) * dist;
 		new_y = (*player)->pos_y - cos((*player)->angle) * dist;
 	}
-	else if (keycode == D)
+	else if ((*player)->move_rigth)
 	{
 		new_x = (*player)->pos_x - sin((*player)->angle) * dist;
 		new_y = (*player)->pos_y + cos((*player)->angle) * dist;
@@ -122,7 +108,7 @@ void	move_mini(t_map *map, t_player **player, double dist, int keycode)
 	check_hit_and_update(map, new_mini_x, new_mini_y, new_x, new_y, player);
 }
 
-void	rotate(t_player **player, double distance, int keycode)
+void	rotate(t_player **player, double distance)
 {
 	double	cos_angle;
 	double	sin_angle;
@@ -131,7 +117,7 @@ void	rotate(t_player **player, double distance, int keycode)
 
 	cos_angle = cos((*player)->angle);
 	sin_angle = sin((*player)->angle);
-	if (keycode == LEFT)
+	if ((*player)->rotate_left)
 	{
 		(*player)->angle -= distance;
 		// (*player)->angle -= distance / 4;
@@ -144,7 +130,7 @@ void	rotate(t_player **player, double distance, int keycode)
 		(*player)->plane_x = (*player)->plane_x * cos(-distance / 4) - (*player)->plane_y * sin(-distance / 4);
 		(*player)->plane_y = old_plane_x * sin(-distance / 4) + (*player)->plane_y * cos(-distance / 4);
 	}
-	else if (keycode == RIGHT)
+	else if ((*player)->rotate_rigth)
 	{
 		(*player)->angle += distance;
 		if ((*player)->angle > 2 * PI)
@@ -179,38 +165,136 @@ int	close_window(t_params *par)
 	return (0);
 }
 
-int	key_event(int keycode, t_params *par)
+// int	key_update(int keycode, t_params *par)
+// {
+// 	// dprintf(2, "(%s, %d), (*player)->mini_pos_x = %f, (*player)->mini_pos_y = %f\n", __FILE__, __LINE__, par->player->mini_pos_x, par->player->mini_pos_y);
+//     if (keycode == KEY_ESC)
+//         close_window(par);
+// 	else if ((keycode == W) || (keycode == S) || (keycode == A) || (keycode == D))
+// 	{
+// 		draw_player(par->mini_map, par->player->mini_pos_x, par->player->mini_pos_y, 0);
+// 		draw_fov(par, par->mini_map, par->map, par->player, 0);
+// 		clear_image(par);
+// 		move_mini(par->map, &par->player, 0.5);
+// 		// draw_player(par->mini_map, par->player->mini_pos_x, par->player->mini_pos_y, par->player->color);
+// 		// draw_fov(par, par->mini_map, par->map, par->player, 255);
+// 		// draw_3d(par, par->img, par->map, par->player, 255);
+// 		floor_casting(par, par->map);
+// 		wall_casting(par, par->player, par->map);
+// 	}
+// 	else if ((keycode == LEFT) || (keycode == RIGHT))
+// 	{
+// 		draw_player(par->mini_map, par->player->mini_pos_x, par->player->mini_pos_y, 0);
+// 		draw_fov(par, par->mini_map, par->map, par->player, 0);
+// 		clear_image(par);
+// 		rotate(&par->player, PI / 6.0);
+// 		// draw_player(par->mini_map, par->player->mini_pos_x, par->player->mini_pos_y, par->player->color);
+// 		// draw_fov(par, par->mini_map, par->map, par->player, 255);
+// 		// draw_3d(par, par->img, par->map, par->player, 255);
+// 		floor_casting(par, par->map);
+// 		wall_casting(par, par->player, par->map);
+// 	}
+// 	draw_vertical_grid(par->mini_map, par->map);
+// 	draw_horizontal_grid(par->mini_map, par->map);
+// 	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img->img, 0, 0);
+// 	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->mini_map->img, WIDTH - WIDTH_MINI, HEIGHT - HEIGHT_MINI);
+// 	return (0);
+// }
+
+int	key_update(t_params *par)
 {
 	// dprintf(2, "(%s, %d), (*player)->mini_pos_x = %f, (*player)->mini_pos_y = %f\n", __FILE__, __LINE__, par->player->mini_pos_x, par->player->mini_pos_y);
-    if (keycode == KEY_ESC)
-        close_window(par);
-	else if ((keycode == W) || (keycode == S) || (keycode == A) || (keycode == D))
+    
+	/*else */if (par->player->move_up || par->player->move_down || par->player->move_rigth || par->player->move_left)
 	{
 		draw_player(par->mini_map, par->player->mini_pos_x, par->player->mini_pos_y, 0);
 		draw_fov(par, par->mini_map, par->map, par->player, 0);
 		clear_image(par);
-		move_mini(par->map, &par->player, 0.5, keycode);
+		move_mini(par->map, &par->player, 0.5);
 		// draw_player(par->mini_map, par->player->mini_pos_x, par->player->mini_pos_y, par->player->color);
 		// draw_fov(par, par->mini_map, par->map, par->player, 255);
 		// draw_3d(par, par->img, par->map, par->player, 255);
-		floor_casting(par, par->player, par->map);
+		floor_casting(par, par->map);
 		wall_casting(par, par->player, par->map);
 	}
-	else if ((keycode == LEFT) || (keycode == RIGHT))
+	else if (par->player->rotate_left || par->player->rotate_rigth)
 	{
 		draw_player(par->mini_map, par->player->mini_pos_x, par->player->mini_pos_y, 0);
 		draw_fov(par, par->mini_map, par->map, par->player, 0);
 		clear_image(par);
-		rotate(&par->player, PI / 6.0, keycode);
+		rotate(&par->player, PI / 6.0);
 		// draw_player(par->mini_map, par->player->mini_pos_x, par->player->mini_pos_y, par->player->color);
 		// draw_fov(par, par->mini_map, par->map, par->player, 255);
 		// draw_3d(par, par->img, par->map, par->player, 255);
-		floor_casting(par, par->player, par->map);
+		floor_casting(par, par->map);
 		wall_casting(par, par->player, par->map);
 	}
 	draw_vertical_grid(par->mini_map, par->map);
 	draw_horizontal_grid(par->mini_map, par->map);
 	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img->img, 0, 0);
 	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->mini_map->img, WIDTH - WIDTH_MINI, HEIGHT - HEIGHT_MINI);
+	return (0);
+}
+
+int	key_press(int keycode, t_params *par)
+{
+	if (keycode == KEY_ESC)
+        close_window(par);
+	printf("touche enfoncee\n");
+	if (keycode == W)
+	{
+		par->player->move_up = 1;
+		printf("par->player->move_up\n");
+	}
+	else if (keycode == S)
+	{
+		par->player->move_down = 1;
+	}
+	else if (keycode == A)
+	{
+		par->player->move_left = 1;
+	}
+	else if (keycode == D)
+	{
+		par->player->move_rigth = 1;
+	}
+	else if (keycode == LEFT)
+	{
+		par->player->rotate_left = 1;
+	}
+	else if (keycode == RIGHT)
+	{
+		par->player->rotate_rigth = 1;
+	}
+	return (0);
+}
+
+int	key_release(int keycode, t_params *par)
+{
+	printf("touche relachee\n");
+	if (keycode == W)
+	{
+		par->player->move_up = 0;
+	}
+	else if (keycode == S)
+	{
+		par->player->move_down = 0;
+	}
+	else if (keycode == A)
+	{
+		par->player->move_left = 0;
+	}
+	else if (keycode == D)
+	{
+		par->player->move_rigth = 0;
+	}
+	else if (keycode == LEFT)
+	{
+		par->player->rotate_left = 0;
+	}
+	else if (keycode == RIGHT)
+	{
+		par->player->rotate_rigth = 0;
+	}
 	return (0);
 }

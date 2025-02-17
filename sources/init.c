@@ -6,7 +6,7 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:30:57 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/14 15:34:54 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/17 15:07:26 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ cf unit circle in computer graphics.
 */
 void	init_player_angle(t_player *player, char c, int i, int j)
 {
+	player->move_left = 0;
+	player->move_rigth = 0;
+	player->move_down = 0;
+	player->move_up = 0;
+	player->rotate_left = 0;
+	player->rotate_rigth = 0;
 	if (c == 'S')
 	{
 		player->angle = PI / 2;

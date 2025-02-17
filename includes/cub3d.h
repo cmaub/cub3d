@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/14 10:42:14 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/17 15:53:48 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,12 @@ typedef struct s_player
 	float	ray_dir_x1;
 	float	ray_dir_y0;
 	float	ray_dir_y1;
+	int		move_left;
+	int		move_rigth;
+	int		move_up;
+	int		move_down;
+	int		rotate_left;
+	int		rotate_rigth;
 }	t_player;
 
 typedef struct s_img
@@ -156,11 +162,13 @@ void    build_mini_map(t_img *img, t_map *map, t_params *par);
 void	clear_image(t_params *par);
 void	draw_player(t_img *img, double x, double y, int color);
 void	draw_walls(t_img *img, t_map *map, double *x, double *y, double saved_x, double saved_y);
-void    floor_casting(t_params *par, t_player *player, t_map *map);
+void    floor_casting(t_params *par, t_map *map);
 
 /* Events */
-int		key_event(int keycode, t_params *par);
+int		key_update(t_params *par);
 char	is_wall(t_map *map, double new_x, double new_y);
+int		key_press(int keycode, t_params *par);
+int		key_release(int keycode, t_params *par);
 
 /* Raycast */
 void	draw_fov(t_params *par, t_img *img, t_map *map, t_player *player, int color);
