@@ -6,7 +6,7 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:59:12 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/14 17:06:09 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/17 12:24:02 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int main(int ac, char **av)
 	draw_horizontal_grid(par->mini_map, par->map);
 	// dprintf(2, "line %d, file %s\n", __LINE__, __FILE__);
 	draw_fov(par, par->mini_map, par->map, par->player, 255);
-	// floor_casting(par, par->player, par->map);
+	floor_casting(par, par->player, par->map);
 	dprintf(2, "(%s, %d), (*player)->mini_pos_x = %f, (*player)->mini_pos_y = %f\n", __FILE__, __LINE__, par->player->mini_pos_x, par->player->mini_pos_y);
 	// dprintf(2, "line %d, file %s, par->player->pos_x = %f\n", __LINE__, __FILE__, par->player->pos_x);
 	wall_casting(par, par->player, par->map);
