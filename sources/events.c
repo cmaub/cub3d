@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   events.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 15:04:24 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/17 16:01:26 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/18 15:47:06 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,23 +87,29 @@ void	move_mini(t_map *map, t_player **player, double dist)
 	{
 		new_x = (*player)->pos_x + cos((*player)->angle) * dist;
 		new_y = (*player)->pos_y + sin((*player)->angle) * dist;
-		// new_mini_x = roundf((*player)->mini_pos_x + cos((*player)->angle) * dist);
-		// new_mini_y = roundf((*player)->mini_pos_y + sin((*player)->angle) * dist);
+		// new_mini_x = (*player)->mini_pos_x + cos((*player)->angle) * dist;
+		// new_mini_y = (*player)->mini_pos_y + sin((*player)->angle) * dist;
 	}
 	else if ((*player)->move_down)
 	{
 		new_x = (*player)->pos_x - cos((*player)->angle) * dist;
 		new_y = (*player)->pos_y - sin((*player)->angle) * dist;
+		// new_mini_x = (*player)->mini_pos_x - cos((*player)->angle) * dist;
+		// new_mini_y = (*player)->mini_pos_y - sin((*player)->angle) * dist;
 	}	
 	else if ((*player)->move_left)
 	{
 		new_x = (*player)->pos_x + sin((*player)->angle) * dist;
 		new_y = (*player)->pos_y - cos((*player)->angle) * dist;
+		// new_mini_x = (*player)->mini_pos_x + sin((*player)->angle) * dist;
+		// new_mini_y = (*player)->mini_pos_y - cos((*player)->angle) * dist;
 	}
 	else if ((*player)->move_rigth)
 	{
 		new_x = (*player)->pos_x - sin((*player)->angle) * dist;
 		new_y = (*player)->pos_y + cos((*player)->angle) * dist;
+		// new_mini_x = (*player)->mini_pos_x - sin((*player)->angle) * dist;
+		// new_mini_y = (*player)->mini_pos_y + cos((*player)->angle) * dist;
 	}
 	check_hit_and_update(map, new_mini_x, new_mini_y, new_x, new_y, player);
 }
@@ -146,11 +152,12 @@ void	rotate(t_player **player, double distance)
 
 int	close_window(t_params *par)
 {
-	if (!par)
-	{
-		exit(1);
-		return (0);
-	}
+	clean(par);
+	// if (!par)
+	// {
+	// 	exit(1);
+	// 	return (0);
+	// }
 	if (par->img)
 		mlx_destroy_image(par->mlx_ptr, par->img->img);
 	if (par->win_ptr)
@@ -159,8 +166,11 @@ int	close_window(t_params *par)
 	{
 		mlx_destroy_display(par->mlx_ptr);
 		free(par->mlx_ptr);
-		free(par);
 	}
+	if (par->img)
+		free(par->img);
+	if (par)
+		free(par);
 	exit(1);
 	return (0);
 }
@@ -207,9 +217,9 @@ int	key_update(t_params *par)
     
 	/*else */if (par->player->move_up || par->player->move_down || par->player->move_rigth || par->player->move_left)
 	{
-		draw_player(par->mini_map, par->player->mini_pos_x, par->player->mini_pos_y, 0);
-		draw_fov(par, par->mini_map, par->map, par->player, 0);
-		clear_image(par);
+		// draw_player(par->mini_map, par->player->mini_pos_x, par->player->mini_pos_y, 0);
+		// draw_fov(par, par->mini_map, par->map, par->player, 0);
+		// clear_image(par);
 		move_mini(par->map, &par->player, 0.5);
 		// draw_player(par->mini_map, par->player->mini_pos_x, par->player->mini_pos_y, par->player->color);
 		// draw_fov(par, par->mini_map, par->map, par->player, 255);
@@ -219,9 +229,9 @@ int	key_update(t_params *par)
 	}
 	else if (par->player->rotate_left || par->player->rotate_rigth)
 	{
-		draw_player(par->mini_map, par->player->mini_pos_x, par->player->mini_pos_y, 0);
-		draw_fov(par, par->mini_map, par->map, par->player, 0);
-		clear_image(par);
+		// draw_player(par->mini_map, par->player->mini_pos_x, par->player->mini_pos_y, 0);
+		// draw_fov(par, par->mini_map, par->map, par->player, 0);
+		// clear_image(par);
 		rotate(&par->player, PI / 6.0);
 		// draw_player(par->mini_map, par->player->mini_pos_x, par->player->mini_pos_y, par->player->color);
 		// draw_fov(par, par->mini_map, par->map, par->player, 255);
@@ -229,10 +239,10 @@ int	key_update(t_params *par)
 		floor_casting(par, par->map);
 		wall_casting(par, par->player, par->map);
 	}
-	draw_vertical_grid(par->mini_map, par->map);
-	draw_horizontal_grid(par->mini_map, par->map);
+	// draw_vertical_grid(par->mini_map, par->map);
+	// draw_horizontal_grid(par->mini_map, par->map);
 	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img->img, 0, 0);
-	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->mini_map->img, WIDTH - WIDTH_MINI, HEIGHT - HEIGHT_MINI);
+	// mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->mini_map->img, WIDTH - WIDTH_MINI, HEIGHT - HEIGHT_MINI);
 	return (0);
 }
 
@@ -240,11 +250,11 @@ int	key_press(int keycode, t_params *par)
 {
 	if (keycode == KEY_ESC)
         close_window(par);
-	printf("touche enfoncee\n");
+	// printf("touche enfoncee\n");
 	if (keycode == W)
 	{
 		par->player->move_up = 1;
-		printf("par->player->move_up\n");
+		// printf("par->player->move_up\n");
 	}
 	else if (keycode == S)
 	{

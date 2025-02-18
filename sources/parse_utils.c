@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:34:35 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/13 15:16:41 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/18 11:54:28 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,11 @@ void	print_map(char **str)
 	int	j;
 
 	i = 0;
-	while (str[i])
+	j = 0;
+
+	while (str[i] != NULL)
 	{
-		j = 0;
-		while (str[i][j])
-		{
-			printf("map[%d][%d] = %c\n", i, j, str[i][j]);
-			j++;
-		}
+		printf("map[%d] = %s\n", i, str[i]);
 		i++;
 	}
 }
@@ -60,7 +57,7 @@ void	replace_spaces(char **str, t_map *map)
 		while (str[i][j] && j < map->length_max)
 		{
 			if (str[i][j] == ' ')
-				str[i][j] = '1';
+				str[i][j] = '0';
 			j++;
 		}
 		while (j < map->length_max)

@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 08:19:38 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/04 11:48:46 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/18 13:35:29 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void		*ft_memmove(void *dest, const void *src, size_t len);
 void		*ft_memset(void *s, int c, size_t len);
 void		*ft_memchr(const void *s, int c, size_t n);
 void		ft_bzero(void *s, size_t len);
-void		*try_malloc(size_t size);
 
 // str
 int			ft_is_only_spaces(char *str);
@@ -96,6 +95,7 @@ long		ft_atol(const char *str);
 char		*ft_itoa(int n);
 void		*ft_calloc(size_t nmemb, size_t size);
 long long	ft_strtoll(const char *str);
+void		*try_malloc(size_t size);
 
 // t_list
 void		ft_lstadd_back(t_list **list, t_list *new);

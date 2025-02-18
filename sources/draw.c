@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:33:25 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/14 17:05:34 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/18 15:30:29 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,12 @@ void	draw_player(t_img *img, double x, double y, int color)
 	int	i;
 	int	j;
 	
-	i = -3;
-	j = -3;
-	while (i < 4)
+	i = -2;
+	j = -2;
+	while (i < 3)
 	{
-		j = -3;
-		while (j < 4)
+		j = -2;
+		while (j < 3)
 		{
 			my_mlx_pixel_put(img, x - i,  y - j, color);
 			j++;
@@ -187,13 +187,15 @@ void    build_mini_map(t_img *mini_map, t_map *map, t_params *par)
 	y = 0.0;
 	i = 0;
 	saved_y = y;
+	(void)mini_map;
+	(void)par;
 	while (i < map->nb_lines)
 	{
-		draw_first_map(mini_map, map, par->player, i, y, saved_y);
-		draw_player(mini_map, par->player->mini_pos_x, par->player->mini_pos_y, rgb_to_int(255, 0, 0));
+		// draw_first_map(mini_map, map, par->player, i, y, saved_y);
+		// draw_player(mini_map, par->player->mini_pos_x, par->player->mini_pos_y, rgb_to_int(255, 0, 0));
 		i++;
 		y = i * map->unit_v_mini;
 		saved_y = y;
 	}
-	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, mini_map->img, WIDTH - WIDTH_MINI, HEIGHT - HEIGHT_MINI);
+	// mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, mini_map->img, WIDTH - WIDTH_MINI, HEIGHT - HEIGHT_MINI);
 }

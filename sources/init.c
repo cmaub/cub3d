@@ -3,22 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:30:57 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/17 15:07:26 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/18 15:35:01 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	count_alloc(t_map *map, char *file)
+int	count_alloc(t_map *map, char *file)
 {
 	int	fd;
 	char *str;
 	
 	fd = open(file, R_OK);
-	
+	if (fd == -1)
+		return (FALSE);
 	while (1)
 	{
 		str = get_next_line(fd);
@@ -30,8 +31,8 @@ void	count_alloc(t_map *map, char *file)
 		free(str);
 	}
 	close(fd);
-	map->parse_file = malloc(sizeof(char *) * (map->nb_lines * map->length_max + 1));
-	
+	map->parse_file = clean_malloc(sizeof(char *) * (map->nb_lines * map->length_max + 1), map->par);
+	return (TRUE);
 }
 
 /*
@@ -85,13 +86,14 @@ void	init_player_angle(t_player *player, char c, int i, int j)
 		player->plane_x = 0.0;
 		player->plane_y = 0.66;
 	}
-	dprintf(2, "(%s, %d), player->pos_x = %f, player->pos_y = %f\n", __FILE__, __LINE__, player->pos_x, player->pos_y);
+	// dprintf(2, "(%s, %d), player->pos_x = %f, player->pos_y = %f\n", __FILE__, __LINE__, player->pos_x, player->pos_y);
 }
 
 void	init_t_map(t_params *par)
 {
-	par->map = try_malloc(sizeof(t_map));
-	par->player = try_malloc(sizeof(t_player));
+	par->fd = -1;
+	par->map = clean_malloc(sizeof(t_map), par);
+	par->player = clean_malloc(sizeof(t_player), par);
 	par->map->player = par->player;
 	par->map->length_max = 0;
 	par->map->nb_lines = 0;
@@ -99,19 +101,12 @@ void	init_t_map(t_params *par)
 	par->map->map_y = 0;
 	par->map->map_s = 0;
 	par->map->color = 0;
-	// map->floor = try_malloc(sizeof(t_img));
-	// map->ceiling = try_malloc(sizeof(t_img));
-	// map->wall_no = try_malloc(sizeof(t_img));
-	// map->wall_so = try_malloc(sizeof(t_img));
-	// map->wall_ea = try_malloc(sizeof(t_img));
-	// map->wall_we = try_malloc(sizeof(t_img));
 	par->map->rgb_floor = -1;
 	par->map->rgb_ceil = -1;
 	par->map->path_no = NULL;
 	par->map->path_so = NULL;
 	par->map->path_ea = NULL;
 	par->map->path_we = NULL;
-	
 }
 
 /*
@@ -147,19 +142,17 @@ void	get_texture_address(t_map *map)
 void    init_structs(t_params *par)
 {
     t_img	*img;
-	t_img	*mini_map;
+	// t_img	*mini_map;
 
-    par->img = try_malloc(sizeof(t_img));
-	par->map->wall_no = try_malloc(sizeof(t_img));
-	par->map->wall_so = try_malloc(sizeof(t_img));
-	par->map->wall_ea = try_malloc(sizeof(t_img));
-	par->map->wall_we = try_malloc(sizeof(t_img));
-	par->mini_map = try_malloc(sizeof(t_img));
-	par->ray = try_malloc(sizeof(t_ray));
+    par->img = clean_malloc(sizeof(t_img), par);
+	par->map->wall_no = clean_malloc(sizeof(t_img), par);
+	par->map->wall_so = clean_malloc(sizeof(t_img), par);
+	par->map->wall_ea = clean_malloc(sizeof(t_img), par);
+	par->map->wall_we = clean_malloc(sizeof(t_img), par);
+	// par->mini_map = clean_malloc(sizeof(t_img), par);
 	par->img->player = par->player;
-	dprintf(2, "(%s, %d), par->player->pos_x = %f\n", __FILE__, __LINE__, par->player->pos_x);
 	img = par->img;
-	mini_map = par->mini_map;
+	// mini_map = par->mini_map;
     par->mlx_ptr = NULL;
     par->win_ptr = NULL;
     par->mlx_ptr = mlx_init();
@@ -167,13 +160,8 @@ void    init_structs(t_params *par)
 	par->map->par = par;
 	par->map->unit_v = HEIGHT / par->map->nb_lines;
 	par->map->unit_h = WIDTH / par->map->length_max;
-	// par->map->wall_no->width = 64;
-	// par->map->wall_no->height = 64;
-	dprintf(2, "%s, %d\n", __FILE__, __LINE__);
 	get_texture_path(par->map);
-	dprintf(2, "%s, %d\n", __FILE__, __LINE__);
 	get_texture_address(par->map);
-	dprintf(2, "%s, %d\n", __FILE__, __LINE__);
     if (!par->mlx_ptr)
        destroy(par);
     par->win_ptr = mlx_new_window(par->mlx_ptr, WIDTH, HEIGHT, "cub3d");
@@ -183,14 +171,14 @@ void    init_structs(t_params *par)
     {
 	    img->width = WIDTH;
 	    img->height = HEIGHT;
-		mini_map->width = WIDTH_MINI;
-		mini_map->height = HEIGHT_MINI;
+		// mini_map->width = WIDTH_MINI;
+		// mini_map->height = HEIGHT_MINI;
         img->img = mlx_new_image(par->mlx_ptr, img->width, img->height);
-		mini_map->img = mlx_new_image(par->mlx_ptr, mini_map->width, mini_map->height);
+		// mini_map->img = mlx_new_image(par->mlx_ptr, mini_map->width, mini_map->height);
         if (!img->img)
             destroy(par);
         img->addr = mlx_get_data_addr(img->img, &img->b_pix, &img->l_len, &img->endian);
-		mini_map->addr = mlx_get_data_addr(mini_map->img, &mini_map->b_pix, &mini_map->l_len, &mini_map->endian);
+		// mini_map->addr = mlx_get_data_addr(mini_map->img, &mini_map->b_pix, &mini_map->l_len, &mini_map->endian);
     }
     par->player->color = rgb_to_int(255, 0, 0);
 	par->player->fov = FOV;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:59:12 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/17 15:57:44 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/18 15:33:23 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,79 +27,58 @@ void	destroy(t_params *par)
 	// 	free_params(par);
 	exit(0);
 }
-void	color_image(t_params *par)
-{
-	int	x;
-	int	y;
-
-	y = 0;
-	while (y < HEIGHT)
-	{
-		x = 0;
-		while (x < WIDTH)
-		{
-			my_mlx_pixel_put(par->mini_map, x, y, 255);
-			// my_mlx_pixel_put(par->mini_map, x, y, 0);
-			x++;
-		}
-		y++;
-	}
-}
 
 int main(int ac, char **av)
 {
     t_params *par;
-	int	fd;
 	char	*str;
 	int	i;
 	(void)ac;
 
-	par = try_malloc(sizeof(t_params));
-	
+	if (ac != 2)
+		return (1);
+	if (!check_extension(av[1], ".cub"))
+		return (1);
+	par = clean_malloc(sizeof(t_params), NULL);
 	init_t_map(par);
-	// revoir verification exit
-	count_alloc(par->map, av[1]);
-	fd = open(av[1], R_OK);
+	if (!count_alloc(par->map, av[1]))
+		return (close_window(par), 1);
+	par->fd = open(av[1], R_OK);
+	if (par->fd == -1)
+		return (close_window(par), 1);
 	i = 0;
 	str = NULL;
 	while (1)
 	{
-		str = get_next_line(fd);
+		str = get_next_line(par->fd);
 		if (!str)
 			break ;
 		if(str[ft_strlen(str) -1] == '\n')
 			str[ft_strlen(str) -1] = '\0';
-		par->map->parse_file[i] = try_malloc(sizeof(char) * par->map->length_max + 1);
+		par->map->parse_file[i] = clean_malloc(sizeof(char) * par->map->length_max + 1, par);
 		ft_strlcpy(par->map->parse_file[i], str, par->map->length_max);
 		free(str);
 		i++;
 	}
-	par->map->parse_file[i] = "\0";
+	close(par->fd);
+	par->fd = -1;
+	par->map->parse_file[i] = ft_strdup("");
+	if (!par->map->parse_file[i])
+		close_window(par);
 	if (!check_av(par->map, par->map->parse_file, i))
-		return (1);
-	// print_tab(par->map->map_tab, par->map);
+		return (close_window(par), 1);
     init_structs(par);
-	build_mini_map(par->mini_map, par->map, par);
-	dprintf(2, "line %d, file %s, par->player->pos_x = %f\n", __LINE__, __FILE__, par->player->pos_x);
-	draw_vertical_grid(par->mini_map, par->map);
-	draw_horizontal_grid(par->mini_map, par->map);
-	// dprintf(2, "line %d, file %s\n", __LINE__, __FILE__);
-	draw_fov(par, par->mini_map, par->map, par->player, 255);
+	// build_mini_map(par->mini_map, par->map, par);
+	// draw_vertical_grid(par->mini_map, par->map);
+	// draw_horizontal_grid(par->mini_map, par->map);
+	// draw_fov(par, par->mini_map, par->map, par->player, 255);
 	floor_casting(par, par->map);
-	dprintf(2, "(%s, %d), (*player)->mini_pos_x = %f, (*player)->mini_pos_y = %f\n", __FILE__, __LINE__, par->player->mini_pos_x, par->player->mini_pos_y);
-	// dprintf(2, "line %d, file %s, par->player->pos_x = %f\n", __LINE__, __FILE__, par->player->pos_x);
 	wall_casting(par, par->player, par->map);
-	// dprintf(2, "line %d, file %s\n", __LINE__, __FILE__);
-	// mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img->img, 0, 0);
-	// draw_3d(par, par->img, par->map, par->player, 255);
-	dprintf(2, "%s, %d\n", __FILE__, __LINE__);
 	// mlx_key_hook(par->win_ptr, key_event, par);
+	mlx_hook(par->win_ptr, 17, 0, close_window, par);
 	mlx_hook(par->win_ptr, 2, 1L << 0, key_press, par);
 	mlx_hook(par->win_ptr, 3, 1L << 1, key_release, par);
-	dprintf(2, "line %d, file %s\n", __LINE__, __FILE__);
 	mlx_loop_hook(par->mlx_ptr, key_update, par);
-	dprintf(2, "line %d, file %s\n", __LINE__, __FILE__);
-	dprintf(2, "%s, %d\n", __FILE__, __LINE__);
     mlx_loop(par->mlx_ptr);
 	free(par);
     return (0);

@@ -6,7 +6,7 @@
 #    By: anvander <anvander@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/22 08:22:29 by cmaubert          #+#    #+#              #
-#    Updated: 2025/01/29 15:01:05 by anvander         ###   ########.fr        #
+#    Updated: 2025/02/18 13:35:18 by anvander         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,8 +51,8 @@ FILES = ft_atoi.c \
 		ft_substr.c \
 		ft_tolower.c \
 		ft_toupper.c \
-		try_malloc.c\
-		get_next_line.c 
+		get_next_line.c \
+		try_malloc.c
 		
 FILES_B = ft_lstadd_back_bonus.c \
 				ft_lstadd_front_bonus.c \

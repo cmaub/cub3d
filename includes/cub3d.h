@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/17 15:53:48 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/18 15:34:12 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,9 @@ typedef struct s_params
 {
 	void		*mlx_ptr;
 	void		*win_ptr;
+	int			fd;
 	t_img		*img;
-	t_img		*mini_map;
+	// t_img		*mini_map;
 	t_player	*player;
 	t_map		*map;
 	t_ray		*ray;
@@ -147,11 +148,15 @@ void	print_tab(char **str, t_map *map);
 
 
 /* Init */
-void	count_alloc(t_map *map, char *file);
+void	free_tab(char **tab);
+void	*clean_malloc(size_t size, t_params *par);
+int		count_alloc(t_map *map, char *file);
 void	init_player_angle(t_player *player, char c, int i, int j);
 void    init_structs(t_params *par);
 void	init_t_map(t_params *par);
 void	destroy(t_params *par);
+void	clean(t_params *par);
+int		check_extension(char *map, char *ext);
 
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
 void	draw_vertical_grid(t_img *img, t_map *map);
@@ -169,6 +174,7 @@ int		key_update(t_params *par);
 char	is_wall(t_map *map, double new_x, double new_y);
 int		key_press(int keycode, t_params *par);
 int		key_release(int keycode, t_params *par);
+int	close_window(t_params *par);
 
 /* Raycast */
 void	draw_fov(t_params *par, t_img *img, t_map *map, t_player *player, int color);
