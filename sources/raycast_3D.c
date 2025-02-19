@@ -6,7 +6,7 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:57:11 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/17 14:29:26 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:19:12 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,156 +42,175 @@ void    floor_casting(t_params *par, t_map *map)
     mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img->img, 0, 0);
 }
 
+void    init_ray(t_raycast *ray, int x, t_player *player)
+{
+    ray->camera_x = 2 * x / (double)WIDTH - 1;
+    ray->ray_dir_x = player->dir_x + player->plane_x * ray->camera_x;
+    ray->ray_dir_y = player->dir_y + player->plane_y * ray->camera_x;
+    ray->map_x = (int)player->pos_x;
+    ray->map_y = (int)player->pos_y;
+    ray->sidedist_x = 0;
+    ray->sidedist_y = 0;
+    ray->delta_dist_x = 0;
+    ray->delta_dist_y = 0;
+    ray->perp_wall_dist = 0;
+    ray->step_x = 0;
+    ray->step_y = 0;
+    ray->hit = 0;
+    ray->side = 0;
+    ray->line_height = 0;
+    ray->draw_start = 0;
+    ray->draw_end = 0;
+    ray->wall_x = 0;
+    ray->tex_x = 0;
+    ray->tex_y = 0;
+    ray->tex_pos = 0;
+    ray->step = 0;
+    ray->color = 0;
+    ray->texture = 0;
+}
+
+void    calcul_step(t_raycast *ray, t_player *player)
+{
+    if (ray->ray_dir_x < 0)
+    {
+        ray->step_x = -1;
+        ray->sidedist_x = (player->pos_x - (double)ray->map_x) * ray->delta_dist_x;
+    }
+    else
+    {
+        ray->step_x = 1;
+        ray->sidedist_x = ((double)ray->map_x + 1.0 - player->pos_x) * ray->delta_dist_x;
+    }
+    if (ray->ray_dir_y < 0)
+    {
+        ray->step_y = -1;
+        ray->sidedist_y = (player->pos_y - (double)ray->map_y) * ray->delta_dist_y;
+    }
+    else
+    {
+        ray->step_y = 1;
+        ray->sidedist_y = ((double)ray->map_y + 1.0 - player->pos_y) * ray->delta_dist_y;
+    }
+}
+
+void    calcul_delta_step(t_raycast *ray, t_player *player)
+{
+    if (ray->ray_dir_x != 0)
+        ray->delta_dist_x = fabs(1 / ray->ray_dir_x);
+    else 
+        ray->delta_dist_x = 1e30;
+    if (ray->ray_dir_y != 0)
+        ray->delta_dist_y = fabs(1 / ray->ray_dir_y);
+    else
+        ray->delta_dist_y = 1e30;
+    calcul_step(ray, player);
+}
+
+void    dda(t_raycast *ray, t_map *map)
+{
+    ray->hit = 0;
+    while (ray->hit == 0)
+    {
+        if (ray->sidedist_x < ray->sidedist_y)
+        {
+            ray->sidedist_x += ray->delta_dist_x;
+            ray->map_x += ray->step_x;
+            ray->side = 0;
+        }
+        else
+        {
+            ray->sidedist_y += ray->delta_dist_y;
+            ray->map_y += ray->step_y;
+            ray->side = 1;
+        }
+        if (ray->map_x < 0 || ray->map_x > map->length_max 
+            || ray->map_y > map->nb_lines || map->map_tab[ray->map_y][ray->map_x] == '1')
+        {
+            ray->hit = 1;
+            break ;
+        }
+    }
+}
+
+void    remove_fish_eye(t_raycast *ray)
+{
+    if (ray->side == 0)
+    ray->perp_wall_dist = ray->sidedist_x - ray->delta_dist_x;
+    else
+        ray->perp_wall_dist = ray->sidedist_y - ray->delta_dist_y;
+    ray->line_height = (int)(HEIGHT / ray->perp_wall_dist);
+}
+
+void    find_bottom_top_pixel(t_raycast *ray)
+{
+    ray->draw_start = -ray->line_height / 2 + HEIGHT / 2;
+    if (ray->draw_start < 0)
+        ray->draw_start = 0;
+    ray->draw_end = ray->line_height / 2 + HEIGHT / 2;
+    if (ray->draw_end >= HEIGHT)
+        ray->draw_end = HEIGHT - 1;
+}
+
+void    find_column_texture(t_raycast *ray, t_map *map, t_player *player)
+{
+    if (ray->side == 0)
+        ray->wall_x = player->pos_y + ray->perp_wall_dist * ray->ray_dir_y;
+    else
+        ray->wall_x = player->pos_x + ray->perp_wall_dist * ray->ray_dir_x;
+    ray->wall_x -= floor(ray->wall_x); // partie fractionnaire de ray->wall_x
+    
+    //Calculate texture
+    if (ray->side == 0 && ray->ray_dir_x > 0)
+        ray->texture = map->wall_ea;
+    if (ray->side == 1 && ray->ray_dir_y < 0)
+        ray->texture = map->wall_no;
+    if (ray->side == 1 && ray->ray_dir_y > 0)
+        ray->texture = map->wall_so;
+    if (ray->side == 0 && ray->ray_dir_x < 0)
+        ray->texture = map->wall_we;
+
+    //x coordinate on the ray->texture
+    ray->tex_x = (int)(ray->wall_x * (double)(ray->texture->width));
+    if (ray->side == 0 && ray->ray_dir_x > 0)
+        ray->tex_x = ray->texture->width - ray->tex_x - 1;
+    if (ray->side == 1 && ray->ray_dir_y < 0)
+        ray->tex_x = ray->texture->width - ray->tex_x - 1;
+}
+
+void    draw_column_texture(int x, int *y, t_raycast *ray, t_params *par)
+{
+    while (*y < ray->draw_end)
+    {
+        ray->tex_y = (int)ray->tex_pos & (ray->texture->height - 1);
+        ray->tex_pos += ray->step;
+        ray->color = *(int *)(ray->texture->addr + ray->tex_y * ray->texture->l_len + ray->tex_x * (ray->texture->b_pix / 8));
+        my_mlx_pixel_put(par->img, x, *y, ray->color);
+        (*y)++;
+    }
+}
+
 void    wall_casting(t_params *par, t_player *player, t_map *map)
 {
     int     x;
     int     y;
-    double  camera_x;
-    double  ray_dir_x;
-    double  ray_dir_y;
-    int     map_x;
-    int     map_y;
-    double  sidedist_x;
-    double  sidedist_y;
-    double  delta_dist_x;
-    double  delta_dist_y;
-    double  perp_wall_dist;
-    int     step_x;
-    int     step_y;
-    int     hit;
-    int     side;
-    int     line_height = 0;
-    int     draw_start;
-    int     draw_end;
-    double  wall_x;
-    // int     tex_num;
-    int     tex_x;
-    int     tex_y;
-    double  tex_pos;
-    double  step;
-    int     color;
-    t_img   *texture;
-    // double  length;
+    t_raycast *ray;
+    
+    ray = clean_malloc(sizeof(t_raycast), par);
     
     x = 0;
-    hit = 0;
     while (x < WIDTH)
     {
-        camera_x = 2 * x / (double)WIDTH - 1;
-        ray_dir_x = player->dir_x + player->plane_x * camera_x;
-        ray_dir_y = player->dir_y + player->plane_y * camera_x;
-        
-        map_x = (int)par->player->pos_x;
-        map_y = (int)par->player->pos_y;
-        // dprintf(2, "map_x %d, map_y %d, player->pox_x = %f, player->pos_y = %f\n", map_x, map_y, player->pos_x, player->pos_y);
-        
-        if (ray_dir_x != 0)
-            delta_dist_x = fabs(1 / ray_dir_x);
-        else 
-            delta_dist_x = 1e30;
-        if (ray_dir_y != 0)
-            delta_dist_y = fabs(1 / ray_dir_y);
-        else
-            delta_dist_y = 1e30;
-        
-        // calcul du step
-        if (ray_dir_x < 0)
-        {
-            step_x = -1;
-            sidedist_x = (player->pos_x - (double)map_x) * delta_dist_x;
-        }
-        else
-        {
-            step_x = 1;
-            sidedist_x = ((double)map_x + 1.0 - player->pos_x) * delta_dist_x;
-        }
-        if (ray_dir_y < 0)
-        {
-            step_y = -1;
-            sidedist_y = (player->pos_y - (double)map_y) * delta_dist_y;
-        }
-        else
-        {
-            step_y = 1;
-            sidedist_y = ((double)map_y + 1.0 - player->pos_y) * delta_dist_y;
-        }
-        // perform DDA
-        
-        hit = 0;
-        while (hit == 0)
-        {
-            if (sidedist_x < sidedist_y)
-            {
-                sidedist_x += delta_dist_x;
-                map_x += step_x;
-                side = 0;
-            }
-            else
-            {
-                sidedist_y += delta_dist_y;
-                map_y += step_y;
-                side = 1;
-            }
-            if (map_x < 0 || map_x > map->length_max || map_y > map->nb_lines || map->map_tab[map_y][map_x] == '1')
-            {
-                hit = 1;
-                break ;
-            }
-        }
-        
-        //calculate the distance of perpendicular ray to remove fish eye
-        if (side == 0)
-            perp_wall_dist = sidedist_x - delta_dist_x;
-        else
-            perp_wall_dist = sidedist_y - delta_dist_y;
-        
-        line_height = (int)(HEIGHT / perp_wall_dist);
-    
-        //Calculate bottom pixel and top pixel to fill in current column
-        draw_start = -line_height / 2 + HEIGHT / 2;
-        if (draw_start < 0)
-            draw_start = 0;
-        draw_end = line_height / 2 + HEIGHT / 2;
-        if (draw_end >= HEIGHT)
-            draw_end = HEIGHT - 1;
-    
-        //Calculate value of wall_x
-        if (side == 0)
-            wall_x = player->pos_y + perp_wall_dist * ray_dir_y;
-        else
-            wall_x = player->pos_x + perp_wall_dist * ray_dir_x;
-        wall_x -= floor(wall_x); // partie fractionnaire de wall_x
-
-        //Calculate texture
-        if (side == 0 && ray_dir_x > 0)
-            texture = map->wall_ea;
-        if (side == 1 && ray_dir_y < 0)
-            texture = map->wall_no;
-        if (side == 1 && ray_dir_y > 0)
-            texture = map->wall_so;
-        if (side == 0 && ray_dir_x < 0)
-            texture = map->wall_we;
-            
-        //x coordinate on the texture
-        tex_x = (int)(wall_x * (double)(texture->width));
-        if (side == 0 && ray_dir_x > 0)
-            tex_x = texture->width - tex_x - 1;
-        if (side == 1 && ray_dir_y < 0)
-            tex_x = texture->width - tex_x - 1;
-
-        //calculate step per screen pixel
-        step = 1.0 * texture->height / line_height;
-        
-        tex_pos = (draw_start - HEIGHT / 2 + line_height / 2) * step;
-        y = draw_start;
-        while (y < draw_end)
-        {
-            tex_y = (int)tex_pos & (texture->height - 1);
-            tex_pos += step;
-            color = *(int *)(texture->addr + tex_y * texture->l_len + tex_x * (texture->b_pix / 8));
-            my_mlx_pixel_put(par->img, x, y, color);
-            y++;
-        }
+        init_ray(ray, x, player);
+        calcul_delta_step(ray, player);
+        dda(ray, map);
+        remove_fish_eye(ray);
+        find_bottom_top_pixel(ray);
+        find_column_texture(ray, map, player);
+        ray->step = 1.0 * ray->texture->height / ray->line_height;
+        ray->tex_pos = (ray->draw_start - HEIGHT / 2 + ray->line_height / 2) * ray->step;
+        y = ray->draw_start;
+        draw_column_texture(x, &y, ray, par);
         x++;
     }
     mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img->img, 0, 0);

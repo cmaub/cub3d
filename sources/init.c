@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:30:57 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/18 15:35:01 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:56:36 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,50 @@ int	count_alloc(t_map *map, char *file)
 /*
 cf unit circle in computer graphics.
 */
+void	init_sud(t_player *player, int i, int j)
+{
+	player->angle = PI / 2;
+	player->pos_x = (double)j + 0.5;
+	player->pos_y = (double)i + 0.5;
+	player->dir_x = 0;
+	player->dir_y = 1;
+	player->plane_x = 0.66;
+	player->plane_y = 0;
+}
+
+void	init_north(t_player *player, int i, int j)
+{
+	player->angle = 3 * PI / 2;
+	player->pos_x = (double)j + 0.5;
+	player->pos_y = (double)i + 0.5;
+	player->dir_x = 0;
+	player->dir_y = -1;
+	player->plane_x = 0.66;
+	player->plane_y = 0;
+}
+
+void	init_east(t_player *player, int i, int j)
+{
+	player->angle = 0;
+	player->pos_x = (double)j + 0.5;
+	player->pos_y = (double)i + 0.5;
+	player->dir_x = 1;
+	player->dir_y = 0;
+	player->plane_x = 0;
+	player->plane_y = 0.66;
+}
+
+void	init_west(t_player *player, int i, int j)
+{
+	player->angle = PI;
+	player->pos_x = (double)j + 0.5;
+	player->pos_y = (double)i + 0.5;
+	player->dir_x = -1;
+	player->dir_y = 0;
+	player->plane_x = 0.0;
+	player->plane_y = 0.66;
+}
+
 void	init_player_angle(t_player *player, char c, int i, int j)
 {
 	player->move_left = 0;
@@ -46,46 +90,16 @@ void	init_player_angle(t_player *player, char c, int i, int j)
 	player->move_up = 0;
 	player->rotate_left = 0;
 	player->rotate_rigth = 0;
+	player->mini_pos_x = 0;
+	player->mini_pos_y = 0;
 	if (c == 'S')
-	{
-		player->angle = PI / 2;
-		player->pos_x = (double)j + 0.5;
-		player->pos_y = (double)i + 0.5;
-		player->dir_x = 0;
-		player->dir_y = 1;
-		player->plane_x = 0.66;
-		player->plane_y = 0;
-	}
+		init_sud(player, i, j);
 	else if (c == 'N')
-	{
-		player->angle = 3 * PI / 2;
-		player->pos_x = (double)j + 0.5;
-		player->pos_y = (double)i + 0.5;
-		player->dir_x = 0;
-		player->dir_y = -1;
-		player->plane_x = 0.66;
-		player->plane_y = 0;
-	}
+		init_north(player, i, j);
 	else if (c == 'E')
-	{
-		player->angle = 0;
-		player->pos_x = (double)j + 0.5;
-		player->pos_y = (double)i + 0.5;
-		player->dir_x = 1;
-		player->dir_y = 0;
-		player->plane_x = 0;
-		player->plane_y = 0.66;
-	}
+		init_east(player, i, j);
 	else if (c == 'W')
-	{
-		player->angle = PI;
-		player->pos_x = (double)j + 0.5;
-		player->pos_y = (double)i + 0.5;
-		player->dir_x = -1;
-		player->dir_y = 0;
-		player->plane_x = 0.0;
-		player->plane_y = 0.66;
-	}
+		init_west(player, i, j);
 	// dprintf(2, "(%s, %d), player->pos_x = %f, player->pos_y = %f\n", __FILE__, __LINE__, player->pos_x, player->pos_y);
 }
 
@@ -97,9 +111,6 @@ void	init_t_map(t_params *par)
 	par->map->player = par->player;
 	par->map->length_max = 0;
 	par->map->nb_lines = 0;
-	par->map->map_x = 0;
-	par->map->map_y = 0;
-	par->map->map_s = 0;
 	par->map->color = 0;
 	par->map->rgb_floor = -1;
 	par->map->rgb_ceil = -1;
@@ -116,7 +127,6 @@ void	get_texture_path(t_map *map)
 {
 	map->wall_no->img = mlx_xpm_file_to_image(map->par->mlx_ptr, map->path_no,
 				&map->wall_no->width, &map->wall_no->height);
-	dprintf(2, "%s, %d\n", __FILE__, __LINE__);
 	map->wall_so->img = mlx_xpm_file_to_image(map->par->mlx_ptr, map->path_so,
 				&map->wall_so->width, &map->wall_so->height);
 	map->wall_ea->img = mlx_xpm_file_to_image(map->par->mlx_ptr, map->path_ea,
@@ -139,46 +149,51 @@ void	get_texture_address(t_map *map)
 					&map->wall_we->l_len, &map->wall_we->endian);					
 }
 
-void    init_structs(t_params *par)
+void	init_map(t_params *par)
 {
-    t_img	*img;
-	// t_img	*mini_map;
-
-    par->img = clean_malloc(sizeof(t_img), par);
 	par->map->wall_no = clean_malloc(sizeof(t_img), par);
 	par->map->wall_so = clean_malloc(sizeof(t_img), par);
 	par->map->wall_ea = clean_malloc(sizeof(t_img), par);
 	par->map->wall_we = clean_malloc(sizeof(t_img), par);
-	// par->mini_map = clean_malloc(sizeof(t_img), par);
-	par->img->player = par->player;
-	img = par->img;
-	// mini_map = par->mini_map;
-    par->mlx_ptr = NULL;
-    par->win_ptr = NULL;
-    par->mlx_ptr = mlx_init();
+	par->mini_map = clean_malloc(sizeof(t_img), par);
 	par->map->height = 0;
 	par->map->par = par;
 	par->map->unit_v = HEIGHT / par->map->nb_lines;
 	par->map->unit_h = WIDTH / par->map->length_max;
+}
+
+void    init_structs(t_params *par)
+{
+    t_img	*img;
+	t_img	*mini_map;
+
+    par->img = clean_malloc(sizeof(t_img), par);
+	init_map(par);
+	par->img->player = par->player;
+	img = par->img;
+    par->mlx_ptr = NULL;
+    par->win_ptr = NULL;
+    par->mlx_ptr = mlx_init();
+	mini_map = par->mini_map;
 	get_texture_path(par->map);
 	get_texture_address(par->map);
     if (!par->mlx_ptr)
-       destroy(par);
+		close_window(par);
     par->win_ptr = mlx_new_window(par->mlx_ptr, WIDTH, HEIGHT, "cub3d");
     if (!par->win_ptr)
-        destroy(par);
+		close_window(par);
     else
     {
 	    img->width = WIDTH;
 	    img->height = HEIGHT;
-		// mini_map->width = WIDTH_MINI;
-		// mini_map->height = HEIGHT_MINI;
+		mini_map->width = WIDTH_MINI;
+		mini_map->height = HEIGHT_MINI;
         img->img = mlx_new_image(par->mlx_ptr, img->width, img->height);
-		// mini_map->img = mlx_new_image(par->mlx_ptr, mini_map->width, mini_map->height);
+		mini_map->img = mlx_new_image(par->mlx_ptr, mini_map->width, mini_map->height);
         if (!img->img)
-            destroy(par);
+            close_window(par);
         img->addr = mlx_get_data_addr(img->img, &img->b_pix, &img->l_len, &img->endian);
-		// mini_map->addr = mlx_get_data_addr(mini_map->img, &mini_map->b_pix, &mini_map->l_len, &mini_map->endian);
+		mini_map->addr = mlx_get_data_addr(mini_map->img, &mini_map->b_pix, &mini_map->l_len, &mini_map->endian);
     }
     par->player->color = rgb_to_int(255, 0, 0);
 	par->player->fov = FOV;

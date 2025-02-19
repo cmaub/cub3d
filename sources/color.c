@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 12:31:18 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/18 13:29:27 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/19 11:58:54 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,13 @@ int	is_color_valid(char *str)
 	return (TRUE);
 }
 
-int	check_color_params(char *str, int *rgb)
+int	check_syntax(char *str)
 {
-	char **params;
 	int	i;
-	char	*dup_str;
-	int	nb;
 	int	flag;
-	
-	flag = 0;
-	str += 2;
-	dup_str = str;
+
 	i = 0;
+	flag = 0;
 	while (i < 4 && str[i] != '\0')
 	{
 		if ((!ft_isdigit(str[i]) && str[i] != ',') || (str[i] == ',' && str[i + 1] == ','))
@@ -60,11 +55,22 @@ int	check_color_params(char *str, int *rgb)
 	}
 	if (flag != 2 || str[i] != '\0')
 		return (FALSE);
+	return (TRUE);
+}
+
+int	check_color_params(char *str, int *rgb)
+{
+	char **params;
+	int	i;
+	int	nb;
+
+	str += 2;
+	if (!check_syntax(str))
+		return (FALSE);
 	i = 0;
-	
-	params = ft_split(dup_str, ',');
+	params = ft_split(str, ',');
 	if (!params)
-		return (printf("line %d\n", __LINE__),FALSE);
+		return (FALSE);
 	while (params[i])
 	{
 		if (!is_color_valid(params[i]))
@@ -75,7 +81,7 @@ int	check_color_params(char *str, int *rgb)
 		i++;
 	}
 	if (i != 3)
-		return (printf("line %d\n", __LINE__), free_tab(params), FALSE);
+		return (printf("wrong color param\n"), free_tab(params), FALSE);
 	(*rgb) = rgb_to_int(ft_atoi(params[0]), ft_atoi(params[1]), ft_atoi(params[2]));
 	free_tab(params);
 	return (TRUE);

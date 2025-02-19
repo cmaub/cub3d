@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/18 15:34:12 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/19 17:04:18 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,19 +83,44 @@ typedef struct s_img
 	t_player *player;
 }	t_img;
 
+typedef struct s_raycast
+{
+	double  camera_x;
+    double  ray_dir_x;
+    double  ray_dir_y;
+    int     map_x;
+    int     map_y;
+    double  sidedist_x;
+    double  sidedist_y;
+    double  delta_dist_x;
+    double  delta_dist_y;
+    double  perp_wall_dist;
+    int     step_x;
+    int     step_y;
+    int     hit;
+    int     side;
+    int     line_height;
+    int     draw_start;
+    int     draw_end;
+    double  wall_x;
+    int     tex_x;
+    int     tex_y;
+    double  tex_pos;
+    double  step;
+    int     color;
+    t_img   *texture;
+}	t_raycast;
+
 typedef struct s_map
 {
 	int			length_max;
 	int			nb_lines;
-	int			unit_h_mini;
-	int			unit_v_mini;
+	double			unit_h_mini;
+	double			unit_v_mini;
 	int			unit_v;
 	int			unit_h;
 	char 		**parse_file;
 	char		**map_tab;
-	int			map_x; // pas utilse
-	int			map_y; // pas utilise
-	int			map_s; // pas utilise
 	int			color;
 	t_img		floor;
 	t_img		ceiling;
@@ -114,6 +139,7 @@ typedef struct s_map
 	char		*path_we;
 	t_player	*player;
 	t_params	*par;
+	int			flag;
 }	t_map;
 
 typedef struct s_ray
@@ -129,56 +155,55 @@ typedef struct s_params
 	void		*win_ptr;
 	int			fd;
 	t_img		*img;
-	// t_img		*mini_map;
+	t_img		*mini_map;
 	t_player	*player;
 	t_map		*map;
 	t_ray		*ray;
 }	t_params;
 
-
-
 /* Parsing */
-int		check_av(t_map *map, char **str, int count);
+int		check_av(t_map *map, char **str);
 int		check_map(char **str, t_map *map, int i);
 int		check_color_params(char *str, int *rgb);
+int		check_extension(char *map, char *ext);
 int		rgb_to_int(int r, int g, int b);
 void	replace_spaces(char **str, t_map *map);
 void	print_map(char **str);
 void	print_tab(char **str, t_map *map);
 
-
 /* Init */
-void	free_tab(char **tab);
-void	*clean_malloc(size_t size, t_params *par);
 int		count_alloc(t_map *map, char *file);
 void	init_player_angle(t_player *player, char c, int i, int j);
 void    init_structs(t_params *par);
 void	init_t_map(t_params *par);
-void	destroy(t_params *par);
-void	clean(t_params *par);
-int		check_extension(char *map, char *ext);
 
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
+
+/* Clean */
+void	clean(t_params *par);
+int		close_window(t_params *par);
+void	free_tab(char **tab);
+void	*clean_malloc(size_t size, t_params *par);
+
+/* Mini_map */
+void	draw_player(t_img *img, double x, double y, int color);
+void	draw_walls(t_img *img, t_map *map, double *x, double *y, double saved_x, double saved_y);
 void	draw_vertical_grid(t_img *img, t_map *map);
 void	draw_horizontal_grid(t_img *img, t_map *map);
 void    build_mini_map(t_img *img, t_map *map, t_params *par);
-
-/* Draw */
-void	clear_image(t_params *par);
-void	draw_player(t_img *img, double x, double y, int color);
-void	draw_walls(t_img *img, t_map *map, double *x, double *y, double saved_x, double saved_y);
 void    floor_casting(t_params *par, t_map *map);
+void	draw_rays(t_params *par, t_img *img, t_map *map, double start_x, int color);
+void	draw_lines_2d(t_params *par, t_img *img, t_map *map, double start_x, int color);
+void	draw_fov(t_params *par, t_img *img, t_map *map, t_player *player, int color);
+char	is_wall(t_map *map, double new_x, double new_y);
 
 /* Events */
 int		key_update(t_params *par);
-char	is_wall(t_map *map, double new_x, double new_y);
 int		key_press(int keycode, t_params *par);
 int		key_release(int keycode, t_params *par);
-int	close_window(t_params *par);
 
 /* Raycast */
-void	draw_fov(t_params *par, t_img *img, t_map *map, t_player *player, int color);
-void	draw_3d(t_params *par, t_img *img, t_map *map, t_player *player, int color);
+// void	draw_3d(t_params *par, t_img *img, t_map *map, t_player *player, int color);
 void    wall_casting(t_params *par, t_player *player, t_map *map);
 
 #endif
