@@ -1,0 +1,77 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_player.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/20 16:02:23 by anvander          #+#    #+#             */
+/*   Updated: 2025/02/20 16:48:56 by anvander         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+void	init_sud(t_player *player, int i, int j)
+{
+	player->angle = PI / 2;
+	player->pos_x = (double)j + 0.5;
+	player->pos_y = (double)i + 0.5;
+	player->dir_x = 0;
+	player->dir_y = 1;
+	player->plane_x = 0.66;
+	player->plane_y = 0;
+}
+
+void	init_north(t_player *player, int i, int j)
+{
+	player->angle = 3 * PI / 2;
+	player->pos_x = (double)j + 0.5;
+	player->pos_y = (double)i + 0.5;
+	player->dir_x = 0;
+	player->dir_y = -1;
+	player->plane_x = 0.66;
+	player->plane_y = 0;
+}
+
+void	init_east(t_player *player, int i, int j)
+{
+	player->angle = 0;
+	player->pos_x = (double)j + 0.5;
+	player->pos_y = (double)i + 0.5;
+	player->dir_x = 1;
+	player->dir_y = 0;
+	player->plane_x = 0;
+	player->plane_y = 0.66;
+}
+
+void	init_west(t_player *player, int i, int j)
+{
+	player->angle = PI;
+	player->pos_x = (double)j + 0.5;
+	player->pos_y = (double)i + 0.5;
+	player->dir_x = -1;
+	player->dir_y = 0;
+	player->plane_x = 0.0;
+	player->plane_y = 0.66;
+}
+
+void	init_player_angle(t_player *player, char c, int i, int j)
+{
+	player->move_left = 0;
+	player->move_rigth = 0;
+	player->move_down = 0;
+	player->move_up = 0;
+	player->left = 0;
+	player->rotate_rigth = 0;
+	player->mini_pos_x = 0;
+	player->mini_pos_y = 0;
+	if (c == 'S')
+		init_sud(player, i, j);
+	else if (c == 'N')
+		init_north(player, i, j);
+	else if (c == 'E')
+		init_east(player, i, j);
+	else if (c == 'W')
+		init_west(player, i, j);
+}

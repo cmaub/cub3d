@@ -3,104 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:30:57 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/19 16:56:36 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/20 16:18:30 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	count_alloc(t_map *map, char *file)
+void    init_ray(t_raycast *ray, int x, t_player *player)
 {
-	int	fd;
-	char *str;
-	
-	fd = open(file, R_OK);
-	if (fd == -1)
-		return (FALSE);
-	while (1)
-	{
-		str = get_next_line(fd);
-		if (!str)
-			break;
-		map->nb_lines++;
-		if ((int)ft_strlen(str) > map->length_max)
-			map->length_max = (int)ft_strlen(str);
-		free(str);
-	}
-	close(fd);
-	map->parse_file = clean_malloc(sizeof(char *) * (map->nb_lines * map->length_max + 1), map->par);
-	return (TRUE);
-}
-
-/*
-cf unit circle in computer graphics.
-*/
-void	init_sud(t_player *player, int i, int j)
-{
-	player->angle = PI / 2;
-	player->pos_x = (double)j + 0.5;
-	player->pos_y = (double)i + 0.5;
-	player->dir_x = 0;
-	player->dir_y = 1;
-	player->plane_x = 0.66;
-	player->plane_y = 0;
-}
-
-void	init_north(t_player *player, int i, int j)
-{
-	player->angle = 3 * PI / 2;
-	player->pos_x = (double)j + 0.5;
-	player->pos_y = (double)i + 0.5;
-	player->dir_x = 0;
-	player->dir_y = -1;
-	player->plane_x = 0.66;
-	player->plane_y = 0;
-}
-
-void	init_east(t_player *player, int i, int j)
-{
-	player->angle = 0;
-	player->pos_x = (double)j + 0.5;
-	player->pos_y = (double)i + 0.5;
-	player->dir_x = 1;
-	player->dir_y = 0;
-	player->plane_x = 0;
-	player->plane_y = 0.66;
-}
-
-void	init_west(t_player *player, int i, int j)
-{
-	player->angle = PI;
-	player->pos_x = (double)j + 0.5;
-	player->pos_y = (double)i + 0.5;
-	player->dir_x = -1;
-	player->dir_y = 0;
-	player->plane_x = 0.0;
-	player->plane_y = 0.66;
-}
-
-void	init_player_angle(t_player *player, char c, int i, int j)
-{
-	player->move_left = 0;
-	player->move_rigth = 0;
-	player->move_down = 0;
-	player->move_up = 0;
-	player->rotate_left = 0;
-	player->rotate_rigth = 0;
-	player->mini_pos_x = 0;
-	player->mini_pos_y = 0;
-	if (c == 'S')
-		init_sud(player, i, j);
-	else if (c == 'N')
-		init_north(player, i, j);
-	else if (c == 'E')
-		init_east(player, i, j);
-	else if (c == 'W')
-		init_west(player, i, j);
-	// dprintf(2, "(%s, %d), player->pos_x = %f, player->pos_y = %f\n", __FILE__, __LINE__, player->pos_x, player->pos_y);
+    ray->camera_x = 2 * x / (double)WIDTH - 1;
+    ray->ray_dir_x = player->dir_x + player->plane_x * ray->camera_x;
+    ray->ray_dir_y = player->dir_y + player->plane_y * ray->camera_x;
+    ray->map_x = (int)player->pos_x;
+    ray->map_y = (int)player->pos_y;
+    ray->sidedist_x = 0;
+    ray->sidedist_y = 0;
+    ray->delta_dist_x = 0;
+    ray->delta_dist_y = 0;
+    ray->perp_wall_dist = 0;
+    ray->step_x = 0;
+    ray->step_y = 0;
+    ray->hit = 0;
+    ray->side = 0;
+    ray->line_height = 0;
+    ray->draw_start = 0;
+    ray->draw_end = 0;
+    ray->wall_x = 0;
+    ray->tex_x = 0;
+    ray->tex_y = 0;
+    ray->tex_pos = 0;
+    ray->step = 0;
+    ray->color = 0;
+    ray->texture = 0;
 }
 
 void	init_t_map(t_params *par)
@@ -111,18 +48,15 @@ void	init_t_map(t_params *par)
 	par->map->player = par->player;
 	par->map->length_max = 0;
 	par->map->nb_lines = 0;
-	par->map->color = 0;
 	par->map->rgb_floor = -1;
 	par->map->rgb_ceil = -1;
 	par->map->path_no = NULL;
 	par->map->path_so = NULL;
 	par->map->path_ea = NULL;
 	par->map->path_we = NULL;
+	par->ray = clean_malloc(sizeof(t_raycast), par);
 }
 
-/*
-TO DO: clean tout en cas d'erreur
-*/
 void	get_texture_path(t_map *map)
 {
 	map->wall_no->img = mlx_xpm_file_to_image(map->par->mlx_ptr, map->path_no,
@@ -134,7 +68,10 @@ void	get_texture_path(t_map *map)
 	map->wall_we->img = mlx_xpm_file_to_image(map->par->mlx_ptr, map->path_we,
 				&map->wall_we->width, &map->wall_we->height);
 	if (!map->wall_no->img || !map->wall_so->img || !map->wall_ea->img || !map->wall_we->img)
-		printf("error\n");			
+	{
+		printf("Error\nwith xpm files\n");
+		close_window(map->par);
+	}	
 }
 
 void	get_texture_address(t_map *map)
@@ -158,8 +95,11 @@ void	init_map(t_params *par)
 	par->mini_map = clean_malloc(sizeof(t_img), par);
 	par->map->height = 0;
 	par->map->par = par;
-	par->map->unit_v = HEIGHT / par->map->nb_lines;
-	par->map->unit_h = WIDTH / par->map->length_max;
+	par->mlx_ptr = NULL;
+    par->win_ptr = NULL;
+    par->mlx_ptr = mlx_init();
+	get_texture_path(par->map);
+	get_texture_address(par->map);
 }
 
 void    init_structs(t_params *par)
@@ -171,31 +111,22 @@ void    init_structs(t_params *par)
 	init_map(par);
 	par->img->player = par->player;
 	img = par->img;
-    par->mlx_ptr = NULL;
-    par->win_ptr = NULL;
-    par->mlx_ptr = mlx_init();
 	mini_map = par->mini_map;
-	get_texture_path(par->map);
-	get_texture_address(par->map);
     if (!par->mlx_ptr)
 		close_window(par);
     par->win_ptr = mlx_new_window(par->mlx_ptr, WIDTH, HEIGHT, "cub3d");
     if (!par->win_ptr)
 		close_window(par);
-    else
-    {
-	    img->width = WIDTH;
-	    img->height = HEIGHT;
-		mini_map->width = WIDTH_MINI;
-		mini_map->height = HEIGHT_MINI;
-        img->img = mlx_new_image(par->mlx_ptr, img->width, img->height);
-		mini_map->img = mlx_new_image(par->mlx_ptr, mini_map->width, mini_map->height);
-        if (!img->img)
-            close_window(par);
-        img->addr = mlx_get_data_addr(img->img, &img->b_pix, &img->l_len, &img->endian);
-		mini_map->addr = mlx_get_data_addr(mini_map->img, &mini_map->b_pix, &mini_map->l_len, &mini_map->endian);
-    }
+	img->width = WIDTH;
+	img->height = HEIGHT;
+	mini_map->width = WIDTH_MINI;
+	mini_map->height = HEIGHT_MINI;
+    img->img = mlx_new_image(par->mlx_ptr, img->width, img->height);
+	mini_map->img = mlx_new_image(par->mlx_ptr, mini_map->width, mini_map->height);
+    if (!img->img)
+        close_window(par);
+    img->addr = mlx_get_data_addr(img->img, &img->b_pix, &img->l_len, &img->endian);
+	mini_map->addr = mlx_get_data_addr(mini_map->img, &mini_map->b_pix, &mini_map->l_len, &mini_map->endian);
     par->player->color = rgb_to_int(255, 0, 0);
-	par->player->fov = FOV;
 	par->player->angle = par->map->player->angle;
 }

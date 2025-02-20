@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/19 17:04:18 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/20 16:48:56 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,10 @@
 # define TRUE 1
 # define FALSE 0
 
-# define HEIGHT_MINI 200
-# define WIDTH_MINI 320
-# define HEIGHT 832
+# define HEIGHT_MINI 167 
+# define WIDTH_MINI 256
+# define HEIGHT 835
 # define WIDTH 1280
-# define FOV 66
 # define PI 3.14159265359
 
 # define W 119
@@ -51,23 +50,16 @@ typedef struct s_player
 	double	mini_pos_x;
 	double	mini_pos_y;
 	int		color;
-	double	fov;
-	int		p_size; // ?
-	int		dist_to_p; // ?
 	double	angle;
 	double	dir_x;
 	double	dir_y;
 	double	plane_x;
 	double	plane_y;
-	float	ray_dir_x0;
-	float	ray_dir_x1;
-	float	ray_dir_y0;
-	float	ray_dir_y1;
 	int		move_left;
 	int		move_rigth;
 	int		move_up;
 	int		move_down;
-	int		rotate_left;
+	int		left;
 	int		rotate_rigth;
 }	t_player;
 
@@ -115,13 +107,10 @@ typedef struct s_map
 {
 	int			length_max;
 	int			nb_lines;
-	double			unit_h_mini;
-	double			unit_v_mini;
-	int			unit_v;
-	int			unit_h;
+	double		unit_h_mini;
+	double		unit_v_mini;
 	char 		**parse_file;
 	char		**map_tab;
-	int			color;
 	t_img		floor;
 	t_img		ceiling;
 	t_img		*wall_no;
@@ -130,8 +119,6 @@ typedef struct s_map
 	t_img		*wall_we;
 	int			rgb_floor;
 	int			rgb_ceil;
-	double		top_pix;
-	double		bot_pix;
 	double		height;
 	char		*path_no;
 	char		*path_so;
@@ -142,13 +129,6 @@ typedef struct s_map
 	int			flag;
 }	t_map;
 
-typedef struct s_ray
-{
-	double	ray_angle;
-	double	distance;
-	int		flag;
-}	t_ray;
-
 typedef struct s_params
 {
 	void		*mlx_ptr;
@@ -158,52 +138,63 @@ typedef struct s_params
 	t_img		*mini_map;
 	t_player	*player;
 	t_map		*map;
-	t_ray		*ray;
+	t_raycast	*ray;
 }	t_params;
 
 /* Parsing */
-int		check_av(t_map *map, char **str);
 int		check_map(char **str, t_map *map, int i);
 int		check_color_params(char *str, int *rgb);
 int		check_extension(char *map, char *ext);
 int		rgb_to_int(int r, int g, int b);
 void	replace_spaces(char **str, t_map *map);
-void	print_map(char **str);
-void	print_tab(char **str, t_map *map);
+int		final_all_path_filled(t_map *map);
+int		temp_all_path_filled(t_map *map);
+int		fill_color(char *str, t_map *map);
+int		fill_texture_path(char *str, t_map *map);
 
 /* Init */
-int		count_alloc(t_map *map, char *file);
-void	init_player_angle(t_player *player, char c, int i, int j);
 void    init_structs(t_params *par);
 void	init_t_map(t_params *par);
+void    init_ray(t_raycast *ray, int x, t_player *player);
 
+/* Init player */
+void	init_player_angle(t_player *player, char c, int i, int j);
+
+/* Draw */
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
-
-/* Clean */
-void	clean(t_params *par);
-int		close_window(t_params *par);
-void	free_tab(char **tab);
-void	*clean_malloc(size_t size, t_params *par);
+void    remove_fish_eye(t_raycast *ray);
+void    draw_column_texture(int x, int *y, t_raycast *ray, t_params *par);
+void    find_column_texture(t_raycast *ray, t_map *map, t_player *player);
+void    draw_floor(t_params *par, t_map *map);
 
 /* Mini_map */
 void	draw_player(t_img *img, double x, double y, int color);
 void	draw_walls(t_img *img, t_map *map, double *x, double *y, double saved_x, double saved_y);
-void	draw_vertical_grid(t_img *img, t_map *map);
-void	draw_horizontal_grid(t_img *img, t_map *map);
 void    build_mini_map(t_img *img, t_map *map, t_params *par);
-void    floor_casting(t_params *par, t_map *map);
-void	draw_rays(t_params *par, t_img *img, t_map *map, double start_x, int color);
-void	draw_lines_2d(t_params *par, t_img *img, t_map *map, double start_x, int color);
-void	draw_fov(t_params *par, t_img *img, t_map *map, t_player *player, int color);
-char	is_wall(t_map *map, double new_x, double new_y);
+
+/* Raycast */
+void    wall_casting(t_params *par, t_player *player, t_map *map);
 
 /* Events */
 int		key_update(t_params *par);
 int		key_press(int keycode, t_params *par);
 int		key_release(int keycode, t_params *par);
+int		mouse_event(int x, int y, t_params *par);
+int		check_hit_and_update(t_map *map, double x, double y, t_player **player);
 
-/* Raycast */
-// void	draw_3d(t_params *par, t_img *img, t_map *map, t_player *player, int color);
-void    wall_casting(t_params *par, t_player *player, t_map *map);
+/* Rotate*/
+void	rotate(t_player **player, double distance);
+
+/* Move */
+void	move(t_map *map, t_player **player, double dist);
+
+/* Free */
+void	clean(t_params *par);
+int		close_window(t_params *par);
+void	free_tab(char **tab);
+
+/* Alloc */
+void	*clean_malloc(size_t size, t_params *par);
+int		count_alloc(t_map *map, char *file);
 
 #endif

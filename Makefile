@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+         #
+#    By: anvander <anvander@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/28 11:47:39 by cmaubert          #+#    #+#              #
-#    Updated: 2025/02/19 11:32:53 by cmaubert         ###   ########.fr        #
+#    Updated: 2025/02/20 16:03:57 by anvander         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,10 +26,14 @@ SOURCES = main.c \
 			draw.c \
 			events.c \
 			init.c \
+			init_player.c \
 			parse.c \
 			parse_utils.c \
 			raycast_3D.c \
-			clean_malloc.c \
+			rotate.c \
+			alloc.c \
+			free.c \
+			move.c \
 			mini_map.c
 
 SRCS = $(addprefix $(SRC_PATH)/,$(SOURCES))
