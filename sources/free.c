@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 12:16:57 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/20 16:18:19 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/21 11:42:41 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	free_tab(char **tab)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (tab == NULL)

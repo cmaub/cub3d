@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:59:12 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/20 16:44:32 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:36:16 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	fill_and_check_file(t_params *par)
 void	ft_hook(t_params *par)
 {
 	mlx_hook(par->win_ptr, 17, 0, close_window, par);
-	mlx_mouse_hook(par->win_ptr, mouse_event, par);
+	mlx_hook(par->win_ptr, 6, 1L << 6, mouse_event, par);
 	mlx_hook(par->win_ptr, 2, 1L << 0, key_press, par);
 	mlx_hook(par->win_ptr, 3, 1L << 1, key_release, par);
 	mlx_loop_hook(par->mlx_ptr, key_update, par);
@@ -87,7 +87,7 @@ int	main(int ac, char **av, char **envp)
 		return (printf("Error\nwrong number of argument\n"), 1);
 	if (!envp || !*envp)
 		return (printf("Error\nthe program cannot run with no environment\n"), 1);
-	if (!check_extension(av[1], ".cub"))
+	if (!check_ext(av[1], ".cub"))
 		return (1);
 	par = clean_malloc(sizeof(t_params), NULL);
 	init_t_map(par);

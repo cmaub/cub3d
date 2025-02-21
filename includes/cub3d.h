@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/20 16:48:56 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:44:51 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ typedef struct s_player
 {
 	double 	pos_x;
 	double 	pos_y;
-	double	mini_pos_x;
-	double	mini_pos_y;
+	double	mini_x;
+	double	mini_y;
 	int		color;
 	double	angle;
 	double	dir_x;
@@ -61,6 +61,7 @@ typedef struct s_player
 	int		move_down;
 	int		left;
 	int		rotate_rigth;
+	int		mouse;
 }	t_player;
 
 typedef struct s_img
@@ -82,10 +83,10 @@ typedef struct s_raycast
     double  ray_dir_y;
     int     map_x;
     int     map_y;
-    double  sidedist_x;
-    double  sidedist_y;
-    double  delta_dist_x;
-    double  delta_dist_y;
+    double  dist_x;
+    double  dist_y;
+    double  delta_x;
+    double  delta_y;
     double  perp_wall_dist;
     int     step_x;
     int     step_y;
@@ -107,8 +108,8 @@ typedef struct s_map
 {
 	int			length_max;
 	int			nb_lines;
-	double		unit_h_mini;
-	double		unit_v_mini;
+	double		h_mini;
+	double		v_mini;
 	char 		**parse_file;
 	char		**map_tab;
 	t_img		floor;
@@ -127,6 +128,8 @@ typedef struct s_map
 	t_player	*player;
 	t_params	*par;
 	int			flag;
+	double		saved_x;
+	double		saved_y;
 }	t_map;
 
 typedef struct s_params
@@ -144,13 +147,18 @@ typedef struct s_params
 /* Parsing */
 int		check_map(char **str, t_map *map, int i);
 int		check_color_params(char *str, int *rgb);
-int		check_extension(char *map, char *ext);
+int		check_ext(char *map, char *ext);
 int		rgb_to_int(int r, int g, int b);
 void	replace_spaces(char **str, t_map *map);
 int		final_all_path_filled(t_map *map);
 int		temp_all_path_filled(t_map *map);
 int		fill_color(char *str, t_map *map);
 int		fill_texture_path(char *str, t_map *map);
+
+/* Init images */
+void	get_texture_address(t_map *map);
+void	get_texture_path(t_map *map);
+void	init_images(t_params *par, t_img *img, t_img *mini_map);
 
 /* Init */
 void    init_structs(t_params *par);
@@ -169,7 +177,7 @@ void    draw_floor(t_params *par, t_map *map);
 
 /* Mini_map */
 void	draw_player(t_img *img, double x, double y, int color);
-void	draw_walls(t_img *img, t_map *map, double *x, double *y, double saved_x, double saved_y);
+void	draw_walls(t_map *map, double *x, double *y);
 void    build_mini_map(t_img *img, t_map *map, t_params *par);
 
 /* Raycast */
@@ -183,7 +191,10 @@ int		mouse_event(int x, int y, t_params *par);
 int		check_hit_and_update(t_map *map, double x, double y, t_player **player);
 
 /* Rotate*/
+void	left(t_player **p, double *o_dir_x, double *o_plane_x, double dist);
+void	right(t_player **p, double *o_dir_x, double *o_plane_x, double dist);
 void	rotate(t_player **player, double distance);
+void	rotate_mouse(t_player **player, double dist, double delta_x);
 
 /* Move */
 void	move(t_map *map, t_player **player, double dist);

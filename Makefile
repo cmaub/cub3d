@@ -6,7 +6,7 @@
 #    By: anvander <anvander@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/28 11:47:39 by cmaubert          #+#    #+#              #
-#    Updated: 2025/02/20 16:03:57 by anvander         ###   ########.fr        #
+#    Updated: 2025/02/21 12:02:15 by anvander         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SOURCES = main.c \
 			draw.c \
 			events.c \
 			init.c \
+			init_img.c \
 			init_player.c \
 			parse.c \
 			parse_utils.c \

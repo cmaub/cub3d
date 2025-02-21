@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:33:25 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/20 16:37:01 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:44:51 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,8 @@ void	draw_column_texture(int x, int *y, t_raycast *ray, t_params *par)
 void	remove_fish_eye(t_raycast *ray)
 {
 	if (ray->side == 0)
-	ray->perp_wall_dist = ray->sidedist_x - ray->delta_dist_x;
+	ray->perp_wall_dist = ray->dist_x - ray->delta_x;
 	else
-		ray->perp_wall_dist = ray->sidedist_y - ray->delta_dist_y;
+		ray->perp_wall_dist = ray->dist_y - ray->delta_y;
 	ray->line_height = (int)(HEIGHT / ray->perp_wall_dist);
 }

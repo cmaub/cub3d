@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:31:48 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/20 16:07:33 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:41:39 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,9 @@ int	check_line(char **str, int i, int*j, t_map *map)
 {
 	while (str[i][*j] && *j < (int)ft_strlen(str[i]))
 	{
-		if (i == 0 || *j == 0 || *j == (int)ft_strlen(str[i]) -1 || !str[i + 1][0] )
-		{
-			if ( str[i][*j] != '1')
-				return (printf("Error\nthe map is unclosed\n"), FALSE);
-		}
+		if ((i == 0 || *j == 0 || *j == (int)ft_strlen(str[i]) - 1
+				|| !str[i + 1][0]) && str[i][*j] != '1')
+			return (printf("Error\nthe map is unclosed\n"), FALSE);
 		if (str[i][*j] == ' ' || str[i][*j] == '0')
 		{
 			if (str[i + 1][*j] == '\0' || str[i + 1][*j] == '\n')
@@ -29,7 +27,8 @@ int	check_line(char **str, int i, int*j, t_map *map)
 		else
 		{
 			if (!ft_strchr("01 NEWS", str[i][*j]))
-				return (printf("Error\nthe map is filled with wrong char\n"), FALSE);
+				return (printf("Error\nthe map is filled with wrong char\n"),
+					FALSE);
 			if (ft_strchr("NEWS", str[i][*j]))
 			{
 				init_player_angle(map->player, str[i][*j], i, *j);
@@ -60,13 +59,13 @@ int	check_map(char **str, t_map *map, int idx)
 		idx += 1;
 	}
 	map->nb_lines = i;
-	map->unit_v_mini = (double)(HEIGHT / map->nb_lines) / 5.0;
-	map->unit_h_mini = (double)(WIDTH / map->length_max) / 5.0;
+	map->v_mini = (double)(HEIGHT / map->nb_lines) / 5.0;
+	map->h_mini = (double)(WIDTH / map->length_max) / 5.0;
 	if (map->flag != 1)
 		return (printf("Error\ncannot find player position\n"), FALSE);
 	replace_spaces(str, map);
 	map->map_tab = str;
-	return (TRUE);		
+	return (TRUE);
 }
 
 int	fill_texture_path(char *str, t_map *map)
@@ -106,7 +105,6 @@ int	fill_color(char *str, t_map *map)
 			return (printf("Error\nchoose only one color for floor\n"), FALSE);
 		if (!check_color_params(str, &map->rgb_floor))
 			return (printf("Error\ninvalid color\n"), FALSE);
-		
 	}
 	if (!ft_strncmp(str, "C ", 2))
 	{
@@ -117,5 +115,3 @@ int	fill_color(char *str, t_map *map)
 	}
 	return (TRUE);
 }
-
-

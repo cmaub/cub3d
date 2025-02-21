@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 16:02:23 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/20 16:48:56 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/21 14:48:46 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,15 @@ void	init_west(t_player *player, int i, int j)
 
 void	init_player_angle(t_player *player, char c, int i, int j)
 {
+	player->mouse = 0;
 	player->move_left = 0;
 	player->move_rigth = 0;
 	player->move_down = 0;
 	player->move_up = 0;
 	player->left = 0;
 	player->rotate_rigth = 0;
-	player->mini_pos_x = 0;
-	player->mini_pos_y = 0;
+	player->mini_x = 0;
+	player->mini_y = 0;
 	if (c == 'S')
 		init_sud(player, i, j);
 	else if (c == 'N')

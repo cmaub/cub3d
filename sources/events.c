@@ -6,7 +6,7 @@
 /*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 15:04:24 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/20 16:48:56 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:35:02 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,21 @@ int	key_update(t_params *par)
 	if (par->player->move_up || par->player->move_down
 		|| par->player->move_rigth || par->player->move_left)
 	{
-		draw_player(par->mini_map, par->player->mini_pos_x,
-			par->player->mini_pos_y, 0);
-		move(par->map, &par->player, 0.3);
-		draw_player(par->mini_map, par->player->mini_pos_x,
-			par->player->mini_pos_y, par->player->color);
+		draw_player(par->mini_map, par->player->mini_x,
+			par->player->mini_y, 0);
+		move(par->map, &par->player, 0.2);
+		draw_player(par->mini_map, par->player->mini_x,
+			par->player->mini_y, par->player->color);
 		draw_floor(par, par->map);
 		wall_casting(par, par->player, par->map);
 	}
 	else if (par->player->left || par->player->rotate_rigth)
 	{
-		draw_player(par->mini_map, par->player->mini_pos_x,
-			par->player->mini_pos_y, 0);
-		rotate(&par->player, PI / 12.0);
-		draw_player(par->mini_map, par->player->mini_pos_x,
-			par->player->mini_pos_y, par->player->color);
+		draw_player(par->mini_map, par->player->mini_x,
+			par->player->mini_y, 0);
+		rotate(&par->player, PI / 18.0);
+		draw_player(par->mini_map, par->player->mini_x,
+			par->player->mini_y, par->player->color);
 		draw_floor(par, par->map);
 		wall_casting(par, par->player, par->map);
 	}
@@ -57,14 +57,26 @@ int	key_update(t_params *par)
 
 int	mouse_event(int x, int y, t_params *par)
 {
-	dprintf(2, "coucou\n");
-	// double	delta_x;
-	// (void)y;
-	// (void)x;
-	// delta_x = x - par->img->width / 2;
-	mlx_mouse_move(par->mlx_ptr, par->win_ptr, x, y);
-	// par->player->angle = delta_x;
-	// rotate(&par->player, PI / 12.0);
+	(void)y;
+	static float	last_x;
+	float	delta_x;
+
+	last_x = par->player->mouse;
+	if (last_x == -1)
+		last_x = x;
+	delta_x = (float)x - last_x;
+	rotate_mouse(&par->player, PI / 18 * 0.5, delta_x);
+	if (x > WIDTH - 5 || x < 5)
+		mlx_mouse_move(par->mlx_ptr, par->win_ptr, WIDTH / 2, HEIGHT / 2);
+	par->player->mouse = 0;
+	draw_player(par->mini_map, par->player->mini_x,
+		par->player->mini_y, par->player->color);
+	draw_floor(par, par->map);
+	wall_casting(par, par->player, par->map);
+	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img->img, 0, 0);
+	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->mini_map->img,
+		WIDTH - WIDTH_MINI, HEIGHT - HEIGHT_MINI);
+	par->player->mouse = x;
 	return (0);
 }
 
