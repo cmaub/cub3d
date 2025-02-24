@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rotate.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 15:56:27 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/21 16:36:44 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/24 17:44:54 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,15 @@ void	rotate(t_player **player, double dist)
 		right(player, &o_dir_x, &o_plane_x, dist);
 }
 
-void	rotate_mouse(t_player **player, double dist, double delta_x)
-{
-	double	o_dir_x;
-	double	o_plane_x;
+// void	rotate_mouse(t_player **player, double dist, double delta_x)
+// {
+// 	double	o_dir_x;
+// 	double	o_plane_x;
 
-	o_dir_x = 0;
-	o_plane_x = 0;
-	if (delta_x < 0)
-		left(player, &o_dir_x, &o_plane_x, dist);
-	else if (delta_x > 0)
-		right(player, &o_dir_x, &o_plane_x, dist);
-}
+// 	o_dir_x = 0;
+// 	o_plane_x = 0;
+// 	if (delta_x < 0)
+// 		left(player, &o_dir_x, &o_plane_x, dist);
+// 	else if (delta_x > 0)
+// 		right(player, &o_dir_x, &o_plane_x, dist);
+// }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:34:35 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/21 14:11:43 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/24 17:48:54 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	final_all_path_filled(t_map *map)
 
 	if (!map->path_no || !map->path_so || !map->path_ea || !map->path_we
 		|| map->rgb_floor == -1 || map->rgb_ceil == -1)
-		return (printf("Error\nmissing param for map definition"), FALSE);
+		return (printf("Error\nmissing param for map definition\n"), FALSE);
 	fd = open(map->path_no, R_OK);
 	if (fd == -1)
 		return (printf("Error\ncannot open %s\n", map->path_no), FALSE);

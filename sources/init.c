@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:30:57 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/21 16:44:51 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/24 11:20:59 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ void	init_map(t_params *par)
 	par->mlx_ptr = NULL;
 	par->win_ptr = NULL;
 	par->mlx_ptr = mlx_init();
+	if (!par->mlx_ptr)
+		close_window(par);
 	get_texture_path(par->map);
 	get_texture_address(par->map);
 }

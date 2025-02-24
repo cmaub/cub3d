@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_img.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 12:01:17 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/21 12:01:56 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/24 11:15:58 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,14 @@ void	init_images(t_params *par, t_img *img, t_img *mini_map)
 		close_window(par);
 	mini_map->img = mlx_new_image(par->mlx_ptr, mini_map->width,
 			mini_map->height);
-	if (!mini_map)
+	if (!mini_map->img)
 		close_window(par);
 	img->addr = mlx_get_data_addr(img->img, &img->b_pix,
 			&img->l_len, &img->endian);
+	if (!img->addr)
+		close_window(par);
 	mini_map->addr = mlx_get_data_addr(mini_map->img, &mini_map->b_pix,
 			&mini_map->l_len, &mini_map->endian);
+	if (!mini_map->addr)
+		close_window(par);
 }

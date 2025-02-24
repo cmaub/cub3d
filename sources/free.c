@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 12:16:57 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/21 11:42:41 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/24 11:12:46 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	clean(t_params *par)
 int	close_window(t_params *par)
 {
 	clean(par);
-	if (par->img->img)
+	if (par->img && par->img->img)
 		mlx_destroy_image(par->mlx_ptr, par->img->img);
 	if (par->win_ptr)
 		mlx_destroy_window(par->mlx_ptr, par->win_ptr);

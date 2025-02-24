@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   events.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 15:04:24 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/21 16:35:02 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/24 15:29:40 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	mouse_event(int x, int y, t_params *par)
 	if (last_x == -1)
 		last_x = x;
 	delta_x = (float)x - last_x;
-	rotate_mouse(&par->player, PI / 18 * 0.5, delta_x);
+	// rotate_mouse(&par->player, PI / 18 * 0.5, delta_x);
 	if (x > WIDTH - 5 || x < 5)
 		mlx_mouse_move(par->mlx_ptr, par->win_ptr, WIDTH / 2, HEIGHT / 2);
 	par->player->mouse = 0;

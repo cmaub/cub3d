@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:59:12 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/21 16:36:16 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/24 15:35:50 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+
+int	other_information(char c)
+{
+	if (ft_strchr("CNWESF\n ", c))
+		return (FALSE);
+	return (TRUE);
+}
 
 int	check_av(t_map *map, char **str)
 {
@@ -21,7 +29,7 @@ int	check_av(t_map *map, char **str)
 		i++;
 	while (str[i])
 	{
-		if (!str[i][0])
+		while (!str[i][0] || ft_is_only_spaces(str[i]))
 		{
 			if (temp_all_path_filled(map))
 				break ;
@@ -29,13 +37,17 @@ int	check_av(t_map *map, char **str)
 		}
 		if (!fill_texture_path(str[i], map) || !fill_color(str[i], map))
 			return (FALSE);
+		if (other_information(str[i][0]))
+			break ;
 		i++;
 	}
 	if (!final_all_path_filled(map))
 		return (FALSE);
-	while (!str[i][0])
-			i++;
+	while (str[i] && (!str[i][0] || ft_is_only_spaces(str[i])))
+		i++;
 	str += i;
+	if (!str)
+		return (printf("Error\nmissing map\n"), FALSE);
 	if (!check_map(str, map, i))
 		return (FALSE);
 	return (TRUE);
@@ -73,7 +85,7 @@ void	fill_and_check_file(t_params *par)
 void	ft_hook(t_params *par)
 {
 	mlx_hook(par->win_ptr, 17, 0, close_window, par);
-	mlx_hook(par->win_ptr, 6, 1L << 6, mouse_event, par);
+	// mlx_hook(par->win_ptr, 6, 1L << 6, mouse_event, par);
 	mlx_hook(par->win_ptr, 2, 1L << 0, key_press, par);
 	mlx_hook(par->win_ptr, 3, 1L << 1, key_release, par);
 	mlx_loop_hook(par->mlx_ptr, key_update, par);

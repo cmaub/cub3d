@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 12:31:18 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/20 16:32:57 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/24 17:56:29 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ int	check_color_params(char *str, int *rgb)
 	int		i;
 	int		nb;
 
-	str += 2;
+	if (!str)
+		return (FALSE);
 	if (!check_syntax(str))
 		return (FALSE);
 	i = -1;
