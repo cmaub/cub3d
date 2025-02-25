@@ -6,7 +6,7 @@
 #    By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/28 11:47:39 by cmaubert          #+#    #+#              #
-#    Updated: 2025/02/25 11:28:27 by cmaubert         ###   ########.fr        #
+#    Updated: 2025/02/25 12:12:36 by cmaubert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ SOURCES = main.c \
 			init_player.c \
 			parse.c \
 			parse_utils.c \
+			parse_textures.c \
 			raycast_3D.c \
 			rotate.c \
 			alloc.c \
@@ -38,7 +39,6 @@ SOURCES = main.c \
 			move.c 
 
 SOURCES_B = main_bonus.c \
-			rotate_bonus.c \
 			mini_map_bonus.c \
 			init_bonus.c \
 			init_img_bonus.c \
@@ -48,7 +48,9 @@ SOURCES_B = main_bonus.c \
 			init_player.c \
 			parse.c \
 			parse_utils.c \
+			parse_textures.c \
 			raycast_3D.c \
+			rotate.c \
 			alloc.c \
 			free.c \
 			move.c 

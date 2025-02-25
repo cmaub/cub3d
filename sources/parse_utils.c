@@ -6,11 +6,18 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:34:35 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/24 17:48:54 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/25 12:24:02 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+int	other_information(char c)
+{
+	if (ft_strchr("CNWESF\n ", c))
+		return (FALSE);
+	return (TRUE);
+}
 
 int	check_ext(char *map, char *ext)
 {

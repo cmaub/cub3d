@@ -6,7 +6,7 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:57:11 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/24 11:17:03 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/25 12:15:03 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,5 @@ void	wall_casting(t_params *par, t_player *player, t_map *map)
 		draw_column_texture(x, &y, ray, par);
 		x++;
 	}
-	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img->img, 0, 0); //mettre une verifitcation ?
+	mlx_put_image_to_window(par->mlx_ptr, par->win_ptr, par->img->img, 0, 0);
 }

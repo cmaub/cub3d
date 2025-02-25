@@ -6,7 +6,7 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/25 11:24:47 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/25 13:30:54 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ typedef struct s_player
 	int		move_down;
 	int		left;
 	int		rotate_rigth;
-	int		mouse;
 }	t_player;
 
 typedef struct s_img
@@ -154,11 +153,13 @@ int		final_all_path_filled(t_map *map);
 int		temp_all_path_filled(t_map *map);
 int		fill_color(char *str, t_map *map);
 int		fill_texture_path(char *str, t_map *map);
+int		other_information(char c);
 
 /* Init images */
 void	get_texture_address(t_map *map);
 void	get_texture_path(t_map *map);
 void	init_images(t_params *par, t_img *img);
+void	init_images_b(t_params *par, t_img *img, t_img *mini_map);
 
 /* Init */
 void	init_structs(t_params *par);
@@ -187,14 +188,13 @@ void	wall_casting(t_params *par, t_player *player, t_map *map);
 int		key_update(t_params *par);
 int		key_press(int keycode, t_params *par);
 int		key_release(int keycode, t_params *par);
-int		mouse_event(int x, int y, t_params *par);
+int		check_hit_and_exit(t_map *map, double x, double y, t_player **player);
 int		check_hit_and_update(t_map *map, double x, double y, t_player **player);
 
 /* Rotate*/
 void	left(t_player **p, double *o_dir_x, double *o_plane_x, double dist);
 void	right(t_player **p, double *o_dir_x, double *o_plane_x, double dist);
 void	rotate(t_player **player, double distance);
-void	rotate_mouse(t_player **player, double dist, double delta_x);
 
 /* Move */
 void	move(t_map *map, t_player **player, double dist);
@@ -207,8 +207,5 @@ void	free_tab(char **tab);
 /* Alloc */
 void	*clean_malloc(size_t size, t_params *par);
 int		count_alloc(t_map *map, char *file);
-
-/* Bonus */
-void	init_images_b(t_params *par, t_img *img, t_img *mini_map);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_player.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 16:02:23 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/25 10:05:54 by anvander         ###   ########.fr       */
+/*   Updated: 2025/02/25 11:40:04 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void	init_west(t_player *player, int i, int j)
 
 void	init_player_angle(t_player *player, char c, int i, int j)
 {
-	player->mouse = 0;
 	player->move_left = 0;
 	player->move_rigth = 0;
 	player->move_down = 0;

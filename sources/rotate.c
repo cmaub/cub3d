@@ -6,7 +6,7 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 15:56:27 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/25 10:57:34 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/25 13:24:12 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,3 @@ void	rotate(t_player **player, double dist)
 	else if ((*player)->rotate_rigth)
 		right(player, &o_dir_x, &o_plane_x, dist);
 }
-

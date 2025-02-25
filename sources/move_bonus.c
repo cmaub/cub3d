@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   move.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 15:55:43 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/25 13:30:33 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:37:14 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	move_up(t_map *map, t_player **player, double dist)
 	new_y = (*player)->pos_y + sin((*player)->angle) * dist;
 	new_mini_x = (*player)->mini_x + cos((*player)->angle) * dist * map->h_mini;
 	new_mini_y = (*player)->mini_y + sin((*player)->angle) * dist * map->v_mini;
-	if (!check_hit_and_exit(map, new_x, new_y, player))
-		close_window(map->par);
+	if (!check_hit_and_update(map, new_x, new_y, player))
+		return ;
 	(*player)->mini_x = new_mini_x;
 	(*player)->mini_y = new_mini_y;
 }
@@ -40,8 +40,8 @@ void	move_down(t_map *map, t_player **player, double dist)
 	new_y = (*player)->pos_y - sin((*player)->angle) * dist;
 	new_mini_x = (*player)->mini_x - cos((*player)->angle) * dist * map->h_mini;
 	new_mini_y = (*player)->mini_y - sin((*player)->angle) * dist * map->v_mini;
-	if (!check_hit_and_exit(map, new_x, new_y, player))
-		close_window(map->par);
+	if (!check_hit_and_update(map, new_x, new_y, player))
+		return ;
 	(*player)->mini_x = new_mini_x;
 	(*player)->mini_y = new_mini_y;
 }
@@ -57,8 +57,8 @@ void	move_left(t_map *map, t_player **player, double dist)
 	new_y = (*player)->pos_y - cos((*player)->angle) * dist;
 	new_mini_x = (*player)->mini_x + sin((*player)->angle) * dist * map->h_mini;
 	new_mini_y = (*player)->mini_y - cos((*player)->angle) * dist * map->v_mini;
-	if (!check_hit_and_exit(map, new_x, new_y, player))
-		close_window(map->par);
+	if (!check_hit_and_update(map, new_x, new_y, player))
+		return ;
 	(*player)->mini_x = new_mini_x;
 	(*player)->mini_y = new_mini_y;
 }
@@ -74,8 +74,8 @@ void	move_rigth(t_map *map, t_player **player, double dist)
 	new_y = (*player)->pos_y + cos((*player)->angle) * dist;
 	new_mini_x = (*player)->mini_x - sin((*player)->angle) * dist * map->h_mini;
 	new_mini_y = (*player)->mini_y + cos((*player)->angle) * dist * map->v_mini;
-	if (!check_hit_and_exit(map, new_x, new_y, player))
-		close_window(map->par);
+	if (!check_hit_and_update(map, new_x, new_y, player))
+		return ;
 	(*player)->mini_x = new_mini_x;
 	(*player)->mini_y = new_mini_y;
 }

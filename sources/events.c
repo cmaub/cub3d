@@ -6,13 +6,13 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 15:04:24 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/25 11:18:57 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/25 13:28:20 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	check_hit_and_update(t_map *map, double x, double y, t_player **player)
+int	check_hit_and_exit(t_map *map, double x, double y, t_player **player)
 {
 	if (map->map_tab[(int)y][(int)x] != '1')
 	{
