@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: anvander <anvander@student.42.fr>          +#+  +:+       +#+         #
+#    By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/28 11:47:39 by cmaubert          #+#    #+#              #
-#    Updated: 2025/02/21 12:02:15 by anvander         ###   ########.fr        #
+#    Updated: 2025/02/25 11:28:27 by cmaubert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ CC      = cc
 FLAGS   = -Wall -Wextra -Werror -g -I$(HEADER) -I$(MLX) -I$(LIBFT)
 
 NAME = cub3D
+NAME_B = cub3D_bonus
 
 LIBFT   = libft
 OBJ_PATH  = objects
@@ -34,11 +35,28 @@ SOURCES = main.c \
 			rotate.c \
 			alloc.c \
 			free.c \
-			move.c \
-			mini_map.c
+			move.c 
+
+SOURCES_B = main_bonus.c \
+			rotate_bonus.c \
+			mini_map_bonus.c \
+			init_bonus.c \
+			init_img_bonus.c \
+			events_bonus.c \
+			color.c \
+			draw.c \
+			init_player.c \
+			parse.c \
+			parse_utils.c \
+			raycast_3D.c \
+			alloc.c \
+			free.c \
+			move.c 
 
 SRCS = $(addprefix $(SRC_PATH)/,$(SOURCES))
+SRCS_B = $(addprefix $(SRC_PATH)/,$(SOURCES_B))
 objects = $(addprefix $(OBJ_PATH)/,$(SOURCES:.c=.o))
+objects_bonus = $(addprefix $(OBJ_PATH)/,$(SOURCES_B:.c=.o))
 
 all: lib tmp $(NAME)
 
@@ -49,11 +67,16 @@ lib:
 $(NAME): $(objects)
 	$(CC) $(FLAGS) -o $@ $^ -L$(LIBFT) -lft -L$(MLX) -lmlx -lXext -lX11 -lm
 
+$(NAME_B): $(objects_bonus)
+	$(CC) $(FLAGS) -o $@ $^ -L$(LIBFT) -lft -L$(MLX) -lmlx -lXext -lX11 -lm
+
 tmp:
 	mkdir -p objects
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c $(HEADER)/cub3d.h
 	$(CC) $(FLAGS) -c -o $@ $<
+
+bonus: lib tmp $(NAME_B) 
 
 clean:
 	make clean -C $(LIBFT)
@@ -62,6 +85,7 @@ clean:
 fclean:
 	rm -rf $(OBJ_PATH)
 	rm -f $(NAME)
+	rm -f $(NAME_B)
 	make fclean -C $(LIBFT)
 
 re: fclean

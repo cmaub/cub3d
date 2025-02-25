@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rotate.c                                           :+:      :+:    :+:   */
+/*   rotate_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/20 15:56:27 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/25 10:57:34 by cmaubert         ###   ########.fr       */
+/*   Created: 2025/02/25 10:57:14 by cmaubert          #+#    #+#             */
+/*   Updated: 2025/02/25 11:27:25 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,3 +57,15 @@ void	rotate(t_player **player, double dist)
 		right(player, &o_dir_x, &o_plane_x, dist);
 }
 
+void	rotate_mouse(t_player **player, double dist, double delta_x)
+{
+	double	o_dir_x;
+	double	o_plane_x;
+
+	o_dir_x = 0;
+	o_plane_x = 0;
+	if (delta_x < 0)
+		left(player, &o_dir_x, &o_plane_x, dist);
+	else if (delta_x > 0)
+		right(player, &o_dir_x, &o_plane_x, dist);
+}

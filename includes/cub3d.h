@@ -6,7 +6,7 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/24 17:05:02 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/25 11:24:47 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ int		fill_texture_path(char *str, t_map *map);
 /* Init images */
 void	get_texture_address(t_map *map);
 void	get_texture_path(t_map *map);
-void	init_images(t_params *par, t_img *img, t_img *mini_map);
+void	init_images(t_params *par, t_img *img);
 
 /* Init */
 void	init_structs(t_params *par);
@@ -207,5 +207,8 @@ void	free_tab(char **tab);
 /* Alloc */
 void	*clean_malloc(size_t size, t_params *par);
 int		count_alloc(t_map *map, char *file);
+
+/* Bonus */
+void	init_images_b(t_params *par, t_img *img, t_img *mini_map);
 
 #endif

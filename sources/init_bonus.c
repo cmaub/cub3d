@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   init_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:30:57 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/25 11:25:00 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/25 11:24:11 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	init_map(t_params *par)
 	par->map->wall_so = clean_malloc(sizeof(t_img), par);
 	par->map->wall_ea = clean_malloc(sizeof(t_img), par);
 	par->map->wall_we = clean_malloc(sizeof(t_img), par);
+	par->mini_map = clean_malloc(sizeof(t_img), par);
 	par->map->height = 0;
 	par->map->par = par;
 	par->mlx_ptr = NULL;
@@ -77,17 +78,19 @@ void	init_map(t_params *par)
 void	init_structs(t_params *par)
 {
 	t_img	*img;
+	t_img	*mini_map;
 
 	par->img = clean_malloc(sizeof(t_img), par);
 	init_map(par);
 	par->img->player = par->player;
 	img = par->img;
+	mini_map = par->mini_map;
 	if (!par->mlx_ptr)
 		close_window(par);
 	par->win_ptr = mlx_new_window(par->mlx_ptr, WIDTH, HEIGHT, "cub3d");
 	if (!par->win_ptr)
 		close_window(par);
-	init_images(par, img);
+	init_images_b(par, img, mini_map);
 	par->player->color = rgb_to_int(255, 0, 0);
 	par->player->angle = par->map->player->angle;
 }

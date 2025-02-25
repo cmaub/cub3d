@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_img.c                                         :+:      :+:    :+:   */
+/*   init_img_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 12:01:17 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/25 11:23:36 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/25 11:24:04 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,25 @@ void	get_texture_address(t_map *map)
 	}
 }
 
-void	init_images(t_params *par, t_img *img)
+void	init_images_b(t_params *par, t_img *img, t_img *mini_map)
 {
 	img->width = WIDTH;
 	img->height = HEIGHT;
+	mini_map->width = WIDTH_MINI;
+	mini_map->height = HEIGHT_MINI;
 	img->img = mlx_new_image(par->mlx_ptr, img->width, img->height);
 	if (!img->img)
+		close_window(par);
+	mini_map->img = mlx_new_image(par->mlx_ptr, mini_map->width,
+			mini_map->height);
+	if (!mini_map->img)
 		close_window(par);
 	img->addr = mlx_get_data_addr(img->img, &img->b_pix,
 			&img->l_len, &img->endian);
 	if (!img->addr)
+		close_window(par);
+	mini_map->addr = mlx_get_data_addr(mini_map->img, &mini_map->b_pix,
+			&mini_map->l_len, &mini_map->endian);
+	if (!mini_map->addr)
 		close_window(par);
 }
