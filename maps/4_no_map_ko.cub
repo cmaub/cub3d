@@ -1,0 +1,7 @@
+NO      textures/fox.xpm
+SO    textures/cat.xpm
+WE textures/dog.xpm
+EA              textures/mouse.xpm
+
+F 220,100,0
+C 255,255,255

@@ -6,7 +6,7 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 15:04:24 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/25 13:28:20 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:23:00 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	key_update(t_params *par)
 	if (par->player->move_up || par->player->move_down
 		|| par->player->move_rigth || par->player->move_left)
 	{
-		move(par->map, &par->player, 0.05);
+		move(par->map, &par->player, 0.065);
 		draw_floor(par, par->map);
 		wall_casting(par, par->player, par->map);
 	}

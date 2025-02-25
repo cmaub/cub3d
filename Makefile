@@ -6,7 +6,7 @@
 #    By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/28 11:47:39 by cmaubert          #+#    #+#              #
-#    Updated: 2025/02/25 12:12:36 by cmaubert         ###   ########.fr        #
+#    Updated: 2025/02/25 13:44:51 by cmaubert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,10 +50,10 @@ SOURCES_B = main_bonus.c \
 			parse_utils.c \
 			parse_textures.c \
 			raycast_3D.c \
-			rotate.c \
 			alloc.c \
 			free.c \
-			move.c 
+			move_bonus.c \
+			rotate_bonus.c
 
 SRCS = $(addprefix $(SRC_PATH)/,$(SOURCES))
 SRCS_B = $(addprefix $(SRC_PATH)/,$(SOURCES_B))

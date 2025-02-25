@@ -6,7 +6,7 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:30:57 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/25 11:25:00 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:09:54 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,4 +90,6 @@ void	init_structs(t_params *par)
 	init_images(par, img);
 	par->player->color = rgb_to_int(255, 0, 0);
 	par->player->angle = par->map->player->angle;
+	par->player->mouse = 0;
+	par->player->rotate_mouse = 0;
 }

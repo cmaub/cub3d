@@ -6,25 +6,25 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:59:12 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/25 12:23:53 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/25 15:31:56 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	move_to_map(char **str, int *i, t_map *map)
+int	move_to_map(char **str, int *i, t_map *map, int idx)
 {
 	while (str[*i] && (!str[*i][0] || ft_is_only_spaces(str[*i])))
 		(*i)++;
 	str += *i;
-	if (!str)
+	if (!str || (!str[*i] && *i == idx + 1))
 		return (printf("Error\nmissing map\n"), FALSE);
 	if (!check_map(str, map, *i))
 		return (FALSE);
 	return (TRUE);
 }
 
-int	check_av(t_map *map, char **str)
+int	check_av(t_map *map, char **str, int idx)
 {
 	int	i;
 
@@ -47,7 +47,7 @@ int	check_av(t_map *map, char **str)
 	}
 	if (!final_all_path_filled(map))
 		return (FALSE);
-	if (!move_to_map(str, &i, map))
+	if (!move_to_map(str, &i, map, idx))
 		return (FALSE);
 	return (TRUE);
 }
@@ -77,7 +77,7 @@ void	fill_and_check_file(t_params *par)
 	par->map->parse_file[i] = ft_strdup("");
 	if (!par->map->parse_file[i])
 		close_window(par);
-	if (!check_av(par->map, par->map->parse_file))
+	if (!check_av(par->map, par->map->parse_file, i))
 		close_window(par);
 }
 

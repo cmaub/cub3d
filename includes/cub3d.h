@@ -6,7 +6,7 @@
 /*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:55:04 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/25 13:30:54 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/25 15:36:16 by cmaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include "libft.h"
-# include <limits.h>//
+# include <limits.h>
 # include <X11/keysym.h>
 
 typedef struct s_params	t_params;
@@ -61,6 +61,8 @@ typedef struct s_player
 	int		move_down;
 	int		left;
 	int		rotate_rigth;
+	float	mouse;
+	int		rotate_mouse;
 }	t_player;
 
 typedef struct s_img
@@ -190,11 +192,13 @@ int		key_press(int keycode, t_params *par);
 int		key_release(int keycode, t_params *par);
 int		check_hit_and_exit(t_map *map, double x, double y, t_player **player);
 int		check_hit_and_update(t_map *map, double x, double y, t_player **player);
+int		mouse_event(int x, int y, t_params *par);
 
 /* Rotate*/
 void	left(t_player **p, double *o_dir_x, double *o_plane_x, double dist);
 void	right(t_player **p, double *o_dir_x, double *o_plane_x, double dist);
 void	rotate(t_player **player, double distance);
+void	rotate_mouse(t_player **player, double dist, double delta_x);
 
 /* Move */
 void	move(t_map *map, t_player **player, double dist);
