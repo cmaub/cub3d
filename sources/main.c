@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:59:12 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/24 15:35:50 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/25 10:10:58 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
 
 int	other_information(char c)
 {
@@ -85,7 +84,7 @@ void	fill_and_check_file(t_params *par)
 void	ft_hook(t_params *par)
 {
 	mlx_hook(par->win_ptr, 17, 0, close_window, par);
-	// mlx_hook(par->win_ptr, 6, 1L << 6, mouse_event, par);
+	mlx_hook(par->win_ptr, 6, 1L << 6, mouse_event, par);
 	mlx_hook(par->win_ptr, 2, 1L << 0, key_press, par);
 	mlx_hook(par->win_ptr, 3, 1L << 1, key_release, par);
 	mlx_loop_hook(par->mlx_ptr, key_update, par);

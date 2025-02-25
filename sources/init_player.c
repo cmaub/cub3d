@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_player.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 16:02:23 by anvander          #+#    #+#             */
-/*   Updated: 2025/02/24 17:35:58 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/25 10:05:54 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ void	init_sud(t_player *player, int i, int j)
 	player->dir_y = 1;
 	player->plane_x = -0.66;
 	player->plane_y = 0;
-	// player->angle = atan2(player->dir_y, player->dir_x);
-	dprintf(2, "SUD: (*player)->angle = %f\n", player->angle);
 }
 
 void	init_north(t_player *player, int i, int j)
@@ -34,7 +32,6 @@ void	init_north(t_player *player, int i, int j)
 	player->dir_y = -1;
 	player->plane_x = 0.66;
 	player->plane_y = 0;
-	dprintf(2, "NORD: (*player)->angle = %f\n", player->angle);
 }
 
 void	init_east(t_player *player, int i, int j)
@@ -46,7 +43,6 @@ void	init_east(t_player *player, int i, int j)
 	player->dir_y = 0;
 	player->plane_x = 0;
 	player->plane_y = 0.66;
-	dprintf(2, "EST: (*player)->angle = %f\n", player->angle);
 }
 
 void	init_west(t_player *player, int i, int j)
@@ -58,7 +54,6 @@ void	init_west(t_player *player, int i, int j)
 	player->dir_y = 0;
 	player->plane_x = 0.0;
 	player->plane_y = -0.66;
-	dprintf(2, "OUEST: (*player)->angle = %f\n", player->angle);
 }
 
 void	init_player_angle(t_player *player, char c, int i, int j)

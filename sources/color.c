@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmaubert <cmaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anvander <anvander@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 12:31:18 by cmaubert          #+#    #+#             */
-/*   Updated: 2025/02/24 17:56:29 by cmaubert         ###   ########.fr       */
+/*   Updated: 2025/02/25 10:08:06 by anvander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	check_syntax(char *str)
 
 int	check_color_params(char *str, int *rgb)
 {
-	char	**params;
+	char	**tab;
 	int		i;
 	int		nb;
 
@@ -70,21 +70,20 @@ int	check_color_params(char *str, int *rgb)
 	if (!check_syntax(str))
 		return (FALSE);
 	i = -1;
-	params = ft_split(str, ',');
-	if (!params)
+	tab = ft_split(str, ',');
+	if (!tab)
 		return (FALSE);
-	while (params[++i])
+	while (tab[++i])
 	{
-		if (!is_color_valid(params[i]))
-			return (free_tab(params), FALSE);
-		nb = ft_atoi(params[i]);
+		if (!is_color_valid(tab[i]))
+			return (free_tab(tab), FALSE);
+		nb = ft_atoi(tab[i]);
 		if (nb < 0 || nb > 255)
-			return (free_tab(params), FALSE);
+			return (free_tab(tab), FALSE);
 	}
 	if (i != 3)
-		return (printf("wrong color param\n"), free_tab(params),
-			FALSE);
-	(*rgb) = rgb_to_int(ft_atoi(params[0]), ft_atoi(params[1]),
-			ft_atoi(params[2]));
-	return (free_tab(params), TRUE);
+		return (printf("Error\nwrong color param\n"), free_tab(tab), FALSE);
+	(*rgb) = rgb_to_int(ft_atoi(tab[0]), ft_atoi(tab[1]),
+			ft_atoi(tab[2]));
+	return (free_tab(tab), TRUE);
 }
